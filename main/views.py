@@ -10,19 +10,19 @@ from django.views.generic import View, DetailView, ListView, UpdateView, CreateV
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 
 
-class ProfileDetailView(DetailView):
-    def get(self, request, *args, **kwargs):
-        pk = self.kwargs.get('pk')
-        user_to_view = get_object_or_404(User, id=pk, is_active=True)
-
-        posts = Post.objects.filter(author=user_to_view.profile).order_by('-date_posted')
-
-        context = {
-            'posts': posts,
-            'user': user_to_view
-        }
-
-        return render(request, 'main/profile.html', context)
+# class ProfileDetailView(DetailView):
+#     def get(self, request, *args, **kwargs):
+#         pk = self.kwargs.get('pk')
+#         user_to_view = get_object_or_404(User, id=pk, is_active=True)
+#
+#         posts = Post.objects.filter(author=user_to_view.profile).order_by('-date_posted')
+#
+#         context = {
+#             'posts': posts,
+#             'user': user_to_view
+#         }
+#
+#         return render(request, 'main/profile.html', context)
 
 
 posts = [
@@ -74,44 +74,44 @@ def home(request):
 #             return render(request, 'main/home.html', {'posts': qs, 'user': user})
 
 
-class PostDetailView(DetailView):
-    model = Post
-
-
-class PostCreateView(CreateView):
-    model = Post
-    fields = ['title', 'content', 'distance', 'time', 'location']
-    success_url = '/'
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user.profile
-        return super().form_valid(form)
-
-
-class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = Post
-    fields = ['title', 'content', 'distance', 'time', 'location']
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user.profile
-        return super().form_valid(form)
-
-    def test_func(self):
-        post = self.get_object()
-        if self.request.user.profile == post.author or self.request.user.is_superuser:
-            return True
-        return False
-
-
-class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    model = Post
-    success_url = '/'
-
-    def test_func(self):
-        post = self.get_object()
-        if self.request.user.profile == post.author or self.request.user.is_superuser:
-            return True
-        return False
+# class PostDetailView(DetailView):
+#     model = Post
+#
+#
+# class PostCreateView(CreateView):
+#     model = Post
+#     fields = ['title', 'content', 'distance', 'time', 'location']
+#     success_url = '/'
+#
+#     def form_valid(self, form):
+#         form.instance.author = self.request.user.profile
+#         return super().form_valid(form)
+#
+#
+# class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+#     model = Post
+#     fields = ['title', 'content', 'distance', 'time', 'location']
+#
+#     def form_valid(self, form):
+#         form.instance.author = self.request.user.profile
+#         return super().form_valid(form)
+#
+#     def test_func(self):
+#         post = self.get_object()
+#         if self.request.user.profile == post.author or self.request.user.is_superuser:
+#             return True
+#         return False
+#
+#
+# class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+#     model = Post
+#     success_url = '/'
+#
+#     def test_func(self):
+#         post = self.get_object()
+#         if self.request.user.profile == post.author or self.request.user.is_superuser:
+#             return True
+#         return False
 
 
 def register(request):
@@ -133,33 +133,33 @@ def profile(request):
     return render(request, 'main/profile.html')
 
 
-@login_required
-def update_profile(request, pk):
-    if not request.user.id == pk:  # pk is the primary key of the user being edited
-        messages.info(request, f'You cannot edit another user\'s account.')
-        return redirect('user-profile', pk)
-
-    if request.method == 'POST':
-        u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST,
-                                   request.FILES,
-                                   instance=request.user.profile)
-        if u_form.is_valid() and p_form.is_valid():
-            u_form.save()
-            p_form.save()
-            messages.success(request, f'Your account has been updated!')
-            return redirect('user-profile', pk)
-
-    else:
-        u_form = UserUpdateForm(instance=request.user)
-        p_form = ProfileUpdateForm(instance=request.user.profile)
-
-    context = {
-        'u_form': u_form,
-        'p_form': p_form
-    }
-
-    return render(request, 'main/profile_update.html', context)
+# @login_required
+# def update_profile(request, pk):
+#     if not request.user.id == pk:  # pk is the primary key of the user being edited
+#         messages.info(request, f'You cannot edit another user\'s account.')
+#         return redirect('user-profile', pk)
+#
+#     if request.method == 'POST':
+#         u_form = UserUpdateForm(request.POST, instance=request.user)
+#         p_form = ProfileUpdateForm(request.POST,
+#                                    request.FILES,
+#                                    instance=request.user.profile)
+#         if u_form.is_valid() and p_form.is_valid():
+#             u_form.save()
+#             p_form.save()
+#             messages.success(request, f'Your account has been updated!')
+#             return redirect('user-profile', pk)
+#
+#     else:
+#         u_form = UserUpdateForm(instance=request.user)
+#         p_form = ProfileUpdateForm(instance=request.user.profile)
+#
+#     context = {
+#         'u_form': u_form,
+#         'p_form': p_form
+#     }
+#
+#     return render(request, 'main/profile_update.html', context)
 
 
 # def add_comment_to_post(request, pk):
@@ -178,9 +178,9 @@ def update_profile(request, pk):
 #     return render(request, 'main/add_comment_to_post.html', {'form': form, 'post': post})
 
 
-class ProfileFollowToggle(LoginRequiredMixin, View):
-    def post(self, request, *args, **kwargs):
-        username_to_toggle = request.POST.get("username")
-        profile_, is_following = Profile.objects.toggle_follow(request.user, username_to_toggle)
-
-        return redirect('user-profile', profile_.user.id)
+# class ProfileFollowToggle(LoginRequiredMixin, View):
+#     def post(self, request, *args, **kwargs):
+#         username_to_toggle = request.POST.get("username")
+#         profile_, is_following = Profile.objects.toggle_follow(request.user, username_to_toggle)
+#
+#         return redirect('user-profile', profile_.user.id)

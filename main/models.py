@@ -20,14 +20,10 @@ class ProfileManager(models.Manager):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(max_length=500, blank=False, default="")
-    followers = models.ManyToManyField(User, symmetrical=False, related_name='is_following',
-                                       blank=True)
-
-    objects = ProfileManager()
+    image = models.ImageField(default='default.jpg', upload_to='profile_pics')
 
     def __str__(self):
-        return self.user.first_name + " " + self.user.last_name
+        return f'{self.user.username} Profile'
 
 
 @receiver(post_save, sender=User)

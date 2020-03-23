@@ -129,6 +129,11 @@ def register(request):
 
 
 @login_required
+def profile(request):
+    return render(request, 'main/profile.html')
+
+
+@login_required
 def update_profile(request, pk):
     if not request.user.id == pk:  # pk is the primary key of the user being edited
         messages.info(request, f'You cannot edit another user\'s account.')

@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.views.generic import View, DetailView, ListView, UpdateView, CreateView, DeleteView
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, UserCreationForm
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 
 
 class ProfileDetailView(DetailView):
@@ -46,6 +46,7 @@ def home(request):
         'posts': posts
     }
     return render(request, 'main/home.html', context)
+
 
 # class PostListViewHome(ListView):
 #     def get(self, request, *args, **kwargs):
@@ -115,13 +116,14 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserRegisterForm(request.POST)
         if form.is_valid():
+            form.save()
             username = form.cleaned_data.get('username')
-            messages.success(request, f'Account created for {username}!')
-            return redirect('main-home')
+            messages.success(request, f'Account created for {username}! You are now able to log in.')
+            return redirect('login')
     else:
-        form = UserCreationForm
+        form = UserRegisterForm
 
     return render(request, 'main/register.html', {'form': form})
 

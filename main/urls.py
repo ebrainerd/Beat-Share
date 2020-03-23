@@ -13,5 +13,4 @@ from . import views
 urlpatterns = [
     path('', views.home, name='main-home'),
     # path('', PostListViewHome.as_view(), name="main-home"),
-    path('register/', views.register, name="register"),
 ]

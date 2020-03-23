@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.views.generic import View, DetailView, ListView, UpdateView, CreateView, DeleteView
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentForm
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 
 
 class ProfileDetailView(DetailView):
@@ -99,7 +99,6 @@ def register(request):
             username = form.cleaned_data.get('username')
             user.refresh_from_db()  # load the profile instance created by the signal
             user.profile.bio = form.cleaned_data.get('bio')
-            user.profile.location = form.cleaned_data.get('location')
             user.save()
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=user.username, password=raw_password)
@@ -140,20 +139,20 @@ def update_profile(request, pk):
     return render(request, 'main/profile_update.html', context)
 
 
-def add_comment_to_post(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.post = post
-            comment.author = request.user.profile
-            comment.save()
-            return redirect('post-detail', pk=post.pk)
-    else:
-        form = CommentForm()
-    return render(request, 'main/add_comment_to_post.html', {'form': form, 'post': post})
+# def add_comment_to_post(request, pk):
+#     post = get_object_or_404(Post, pk=pk)
+#
+#     if request.method == "POST":
+#         form = CommentForm(request.POST)
+#         if form.is_valid():
+#             comment = form.save(commit=False)
+#             comment.post = post
+#             comment.author = request.user.profile
+#             comment.save()
+#             return redirect('post-detail', pk=post.pk)
+#     else:
+#         form = CommentForm()
+#     return render(request, 'main/add_comment_to_post.html', {'form': form, 'post': post})
 
 
 class ProfileFollowToggle(LoginRequiredMixin, View):

@@ -50,15 +50,15 @@ class Post(models.Model):
         return self.title
 
 
-class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
-    comment_id = models.AutoField(primary_key=True)
-    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    content = models.TextField()
-    date_posted = models.DateTimeField(default=timezone.now)
-
-    class Meta:
-        ordering = ['date_posted']
-
-    def __str__(self):
-        return 'Comment {} by {}'.format(self.content, self.author.first_name)
+# class Comment(models.Model):
+#     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+#     comment_id = models.AutoField(primary_key=True)
+#     author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+#     content = models.TextField()
+#     date_posted = models.DateTimeField(default=timezone.now)
+#
+#     class Meta:
+#         ordering = ['date_posted']
+#
+#     def __str__(self):
+#         return 'Comment {} by {}'.format(self.content, self.author.first_name)

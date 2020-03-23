@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.views.generic import View, DetailView, ListView, UpdateView, CreateView, DeleteView
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, UserCreationForm
 
 
 class ProfileDetailView(DetailView):
@@ -25,30 +25,52 @@ class ProfileDetailView(DetailView):
         return render(request, 'main/profile.html', context)
 
 
-class PostListViewHome(ListView):
-    def get(self, request, *args, **kwargs):
-        user = self.request.user
+posts = [
+    {
+        'author': 'CoreyMS',
+        'title': 'Blog Post 1',
+        'content': 'First post content',
+        'date_posted': 'August 27, 2018'
+    },
+    {
+        'author': 'Jane Doe',
+        'title': 'Blog Post 2',
+        'content': 'Second post content',
+        'date_posted': 'August 28, 2018'
+    }
+]
 
-        if not user.is_authenticated:
-            message = "You are not logged in. Displaying all posts by default. " \
-                      + "Please sign in or register to search, view user profiles, and comments."
-            messages.info(self.request, message)
-            return render(request, 'main/home.html', {})
 
-        elif user.is_superuser:
-            qs = Post.objects.all().order_by('-date_posted')
-            message = "Logged in as administrator, " \
-                      + "currently displaying all posts."
-            messages.info(self.request, message)
-            return render(request, 'main/home.html', {'posts': qs})
+def home(request):
+    context = {
+        'posts': posts
+    }
+    return render(request, 'main/home.html', context)
 
-        else:
-            is_following_user_ids = [x.user.id for x in user.is_following.all()]
-            qs = Post.objects.filter(author__user__id__in=is_following_user_ids).order_by('-date_posted')
-            if len(qs) == 0:
-                messages.info(self.request, "There are no posts available to show. Follow other users or wait "
-                              + "until one of the users you follow makes a post.")
-            return render(request, 'main/home.html', {'posts': qs, 'user': user})
+# class PostListViewHome(ListView):
+#     def get(self, request, *args, **kwargs):
+#         user = self.request.user
+#
+#         if not user.is_authenticated:
+#             message = "You are not logged in. Displaying all posts by default. " \
+#                       + "Please sign in or register to search, view user profiles, and comments."
+#             messages.info(self.request, message)
+#             return render(request, 'main/home.html', {})
+#
+#         elif user.is_superuser:
+#             qs = Post.objects.all().order_by('-date_posted')
+#             message = "Logged in as administrator, " \
+#                       + "currently displaying all posts."
+#             messages.info(self.request, message)
+#             return render(request, 'main/home.html', {'posts': qs})
+#
+#         else:
+#             is_following_user_ids = [x.user.id for x in user.is_following.all()]
+#             qs = Post.objects.filter(author__user__id__in=is_following_user_ids).order_by('-date_posted')
+#             if len(qs) == 0:
+#                 messages.info(self.request, "There are no posts available to show. Follow other users or wait "
+#                               + "until one of the users you follow makes a post.")
+#             return render(request, 'main/home.html', {'posts': qs, 'user': user})
 
 
 class PostDetailView(DetailView):
@@ -93,20 +115,14 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 def register(request):
     if request.method == 'POST':
-        form = UserRegisterForm(request.POST)
+        form = UserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
             username = form.cleaned_data.get('username')
-            user.refresh_from_db()  # load the profile instance created by the signal
-            user.profile.bio = form.cleaned_data.get('bio')
-            user.save()
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=user.username, password=raw_password)
-            login(request, user)
             messages.success(request, f'Account created for {username}!')
             return redirect('main-home')
     else:
-        form = UserRegisterForm()
+        form = UserCreationForm
+
     return render(request, 'main/register.html', {'form': form})
 
 

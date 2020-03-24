@@ -18,7 +18,7 @@ def home(request):
         query = request.GET['q']
 
     if query == "":
-        posts = Post.objects.all()
+        posts = Post.objects.all().order_by('-date_posted')
         display_type = "reg"
     else:
         posts = get_query_set(query)

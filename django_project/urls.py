@@ -33,6 +33,7 @@ urlpatterns = [
     path('post/new/', login_required(PostCreateView.as_view()), name='post-create'),
     path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
     path('post/<int:pk>/delete/', login_required(PostDeleteView.as_view()), name='post-delete'),
+    # path('search/', main_views.search, name="main-search"),
     path('', include('main.urls')),
 ]
 

@@ -1,14 +1,24 @@
 {% extends "main/base.html" %}
 {% block content %}
 
+{% if type == "reg" %}
 <h2>Home Feed</h2>
+{% endif %}
+
+{% if not posts and type == "search" %}
+<h5>No matching results.</h5>
+{% else %}
 
 {% for post in posts %}
 <article class="media content-section">
     <img class="rounded-circle article-img" src="{{ post.author.image.url }}">
     <div class="media-body">
         <div class="article-metadata">
-            <a class="article-title" href="#">{{ post.author }}</a>
+            {% if user.is_authenticated %}
+            <a class="mr-2" href="{% url 'profile' pk=post.author.pk %}">{{ post.author }}</a>
+            {% else %}
+            <h5>{{ post.author }}</h5>
+            {% endif %}
             <small class="text-muted"> {{ post.date_posted }}</small>
         </div>
         <h4><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h4>
@@ -20,5 +30,7 @@
     </div>
 </article>
 {% endfor %}
+
+{% endif %}
 
 {% endblock content %}

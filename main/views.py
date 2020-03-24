@@ -9,13 +9,45 @@ from django.contrib.auth import login, authenticate
 from django.views.generic import View, DetailView, ListView, UpdateView, CreateView, DeleteView
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm #UserUpdateForm, ProfileUpdateForm
 from django.http import Http404
+from django.db.models import Q
 
 
 def home(request):
+    query = ""
+    if request.GET:
+        query = request.GET['q']
+
+    if query == "":
+        posts = Post.objects.all()
+        display_type = "reg"
+    else:
+        posts = get_query_set(query)
+        display_type = "search"
+
     context = {
-        'posts': Post.objects.all()
+        'posts': posts,
+        'type': display_type
     }
+
     return render(request, 'main/home.html', context)
+
+
+def get_query_set(query=None):
+    queryset = []
+    queries = query.split(" ")
+    for q in queries:
+        posts = Post.objects.filter(
+            Q(title__icontains=q) |
+            Q(description__icontains=q) |
+            Q(author__user__username__icontains=q) |
+            Q(author__user__first_name__icontains=q) |
+            Q(author__user__last_name__icontains=q)
+        ).distinct().order_by('-date_posted')
+
+        for post in posts:
+            queryset.append(post)
+
+    return list(set(queryset))
 
 
 class PostListViewHome(ListView):
@@ -137,8 +169,11 @@ class ProfileDetailView(DetailView):
         else:
             user_to_view = get_object_or_404(User, id=pk, is_active=True)
 
+        posts = Post.objects.filter(author=user_to_view.profile).order_by('-date_posted')
+
         context = {
-            'user': user_to_view
+            'user': user_to_view,
+            'posts': posts
         }
 
         return render(request, 'main/profile.html', context)

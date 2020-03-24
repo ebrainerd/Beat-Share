@@ -23,13 +23,12 @@ class Profile(models.Model):
     # followers = models.ManyToManyField(User, symmetrical=False, related_name='is_following', blank=True)
 
     def __str__(self):
-        return f'{self.user.username} Profile'
+        return f'{self.user.username}'
 
     # rescale profile pics
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         img = Image.open(self.image.path)
-
         if img.height > 300 or img.width > 300:
             output_size = (300, 300)
             img.thumbnail(output_size)

@@ -19,9 +19,9 @@ from django.urls import include
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth.decorators import login_required
 from main import views as main_views
-from main.views import ProfileDetailView, PostDetailView
-
+from main.views import ProfileDetailView, PostDetailView, PostCreateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,6 +30,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name='main/logout.html'), name='logout'),
     path('profile/<int:pk>/', ProfileDetailView.as_view(), name='profile'),
     path('profile/<int:pk>/update', main_views.update_profile, name="update-profile"),
+    path('post/new/', login_required(PostCreateView.as_view()), name='post-create'),
     path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
     path('', include('main.urls')),
 ]

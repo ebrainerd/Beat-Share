@@ -18,11 +18,21 @@ def home(request):
     return render(request, 'main/home.html', context)
 
 
-class PostListView(ListView):
+class PostListViewHome(ListView):
     model = Post
     template_name = 'main/home.html'
     context_object_name = 'posts'
     ordering = ['-date_posted']
+
+
+class PostCreateView(CreateView):
+    model = Post
+    fields = ['title', 'description', 'song']
+    success_url = '/'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user.profile
+        return super().form_valid(form)
 
 
 class PostDetailView(DetailView):

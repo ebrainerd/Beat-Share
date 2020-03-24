@@ -41,8 +41,8 @@ class Post(models.Model):
     title = models.CharField(max_length=500, blank=False)
     description = models.TextField(blank=True, default="")
     date_posted = models.DateTimeField(default=timezone.now)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    song = models.FileField(blank=False, default=None)
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    song = models.FileField(blank=True, default=None)
 
     def __str__(self):
         return self.title

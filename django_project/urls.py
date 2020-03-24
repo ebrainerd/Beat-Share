@@ -21,7 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.decorators import login_required
 from main import views as main_views
-from main.views import ProfileDetailView, PostDetailView, PostCreateView
+from main.views import ProfileDetailView, PostDetailView, PostCreateView, PostDeleteView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,6 +32,7 @@ urlpatterns = [
     path('profile/<int:pk>/update', main_views.update_profile, name="update-profile"),
     path('post/new/', login_required(PostCreateView.as_view()), name='post-create'),
     path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
+    path('post/<int:pk>/delete/', login_required(PostDeleteView.as_view()), name='post-delete'),
     path('', include('main.urls')),
 ]
 

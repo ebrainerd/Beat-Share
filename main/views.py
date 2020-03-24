@@ -39,6 +39,17 @@ class PostDetailView(DetailView):
     model = Post
 
 
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Post
+    success_url = '/'
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user.profile == post.author or self.request.user.is_superuser:
+            return True
+        return False
+
+
 # class PostListViewHome(ListView):
 #     def get(self, request, *args, **kwargs):
 #         user = self.request.user

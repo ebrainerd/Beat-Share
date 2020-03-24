@@ -11,42 +11,22 @@ from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm #UserUpda
 from django.http import Http404
 
 
-# class ProfileDetailView(DetailView):
-#     def get(self, request, *args, **kwargs):
-#         pk = self.kwargs.get('pk')
-#         user_to_view = get_object_or_404(User, id=pk, is_active=True)
-#
-#         posts = Post.objects.filter(author=user_to_view.profile).order_by('-date_posted')
-#
-#         context = {
-#             'posts': posts,
-#             'user': user_to_view
-#         }
-#
-#         return render(request, 'main/profile.html', context)
-
-
-posts = [
-    {
-        'author': 'CoreyMS',
-        'title': 'Blog Post 1',
-        'content': 'First post content',
-        'date_posted': 'August 27, 2018'
-    },
-    {
-        'author': 'Jane Doe',
-        'title': 'Blog Post 2',
-        'content': 'Second post content',
-        'date_posted': 'August 28, 2018'
-    }
-]
-
-
 def home(request):
     context = {
-        'posts': posts
+        'posts': Post.objects.all()
     }
     return render(request, 'main/home.html', context)
+
+
+class PostListView(ListView):
+    model = Post
+    template_name = 'main/home.html'
+    context_object_name = 'posts'
+    ordering = ['-date_posted']
+
+
+class PostDetailView(DetailView):
+    model = Post
 
 
 # class PostListViewHome(ListView):
@@ -55,7 +35,7 @@ def home(request):
 #
 #         if not user.is_authenticated:
 #             message = "You are not logged in. Displaying all posts by default. " \
-#                       + "Please sign in or register to search, view user profiles, and comments."
+#                       "Please sign in or register."
 #             messages.info(self.request, message)
 #             return render(request, 'main/home.html', {})
 #
@@ -75,10 +55,6 @@ def home(request):
 #             return render(request, 'main/home.html', {'posts': qs, 'user': user})
 
 
-# class PostDetailView(DetailView):
-#     model = Post
-#
-#
 # class PostCreateView(CreateView):
 #     model = Post
 #     fields = ['title', 'content', 'distance', 'time', 'location']
@@ -175,35 +151,6 @@ def update_profile(request, pk):
     }
 
     return render(request, 'main/profile_update.html', context)
-
-
-# @login_required
-# def update_profile(request, pk):
-#     if not request.user.id == pk:  # pk is the primary key of the user being edited
-#         messages.info(request, f'You cannot edit another user\'s account.')
-#         return redirect('user-profile', pk)
-#
-#     if request.method == 'POST':
-#         u_form = UserUpdateForm(request.POST, instance=request.user)
-#         p_form = ProfileUpdateForm(request.POST,
-#                                    request.FILES,
-#                                    instance=request.user.profile)
-#         if u_form.is_valid() and p_form.is_valid():
-#             u_form.save()
-#             p_form.save()
-#             messages.success(request, f'Your account has been updated!')
-#             return redirect('user-profile', pk)
-#
-#     else:
-#         u_form = UserUpdateForm(instance=request.user)
-#         p_form = ProfileUpdateForm(instance=request.user.profile)
-#
-#     context = {
-#         'u_form': u_form,
-#         'p_form': p_form
-#     }
-#
-#     return render(request, 'main/profile_update.html', context)
 
 
 # def add_comment_to_post(request, pk):

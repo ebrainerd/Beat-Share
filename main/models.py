@@ -20,10 +20,12 @@ class ProfileManager(models.Manager):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
+    # followers = models.ManyToManyField(User, symmetrical=False, related_name='is_following', blank=True)
 
     def __str__(self):
         return f'{self.user.username} Profile'
 
+    # rescale profile pics
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         img = Image.open(self.image.path)

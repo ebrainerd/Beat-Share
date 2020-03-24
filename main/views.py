@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.views.generic import View, DetailView, ListView, UpdateView, CreateView, DeleteView
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm #UserUpdateForm, ProfileUpdateForm
+from django.http import Http404
 
 
 # class ProfileDetailView(DetailView):
@@ -128,8 +129,31 @@ def register(request):
     return render(request, 'main/register.html', {'form': form})
 
 
+class ProfileDetailView(DetailView):
+    def get(self, request, *args, **kwargs):
+
+        pk = self.kwargs.get('pk')
+        if pk == request.user.pk:
+            user_to_view = request.user
+        elif pk is None:
+            raise Http404("Could not get user.")
+        else:
+            user_to_view = get_object_or_404(User, id=pk, is_active=True)
+
+        context = {
+            'user': user_to_view
+        }
+
+        return render(request, 'main/profile.html', context)
+
+
+
 @login_required
-def profile(request):
+def update_profile(request, pk):
+    if not request.user.id == pk:  # pk is the primary key of the user being edited
+        messages.info(request, f'You cannot edit another user\'s account.')
+        return redirect('profile', pk)
+
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST,
@@ -138,8 +162,8 @@ def profile(request):
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
-            messages.success(request, f'Your account has been updated.')
-            return redirect('profile')
+            messages.success(request, f'Your account has been updated!')
+            return redirect('profile', pk)
 
     else:
         u_form = UserUpdateForm(instance=request.user)
@@ -150,7 +174,7 @@ def profile(request):
         'p_form': p_form
     }
 
-    return render(request, 'main/profile.html', context)
+    return render(request, 'main/profile_update.html', context)
 
 
 # @login_required

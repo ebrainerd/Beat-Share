@@ -20,6 +20,7 @@ from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
 from main import views as main_views
+from main.views import ProfileDetailView
 
 
 urlpatterns = [
@@ -27,7 +28,8 @@ urlpatterns = [
     path('register/', main_views.register, name='register'),
     path('login/', auth_views.LoginView.as_view(template_name='main/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='main/logout.html'), name='logout'),
-    path('profile/', main_views.profile, name='profile'),
+    path('profile/<int:pk>/', ProfileDetailView.as_view(), name='profile'),
+    path('profile/<int:pk>/update', main_views.update_profile, name="update-profile"),
     path('', include('main.urls')),
 ]
 

@@ -1,25 +1,61 @@
 {% extends "main/base.html" %}
 {% load crispy_forms_tags %}
 
+<!--CSS Styling Legend-->
+<style>
+#Info {
+    color: black;
+    text-align: left;
+    font-family: "Helvetica Neue";
+}
+
+</style>
+
 {% block content %}
 <div class="content-section">
     <div class="media">
         <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
         <div class="media-body">
-            <h2 class="account-heading">{{ user.username }}</h2>
-            <p class="text-secondary">{{ user.email }}</p>
+            <div class="row">
+                <div class="col">
+                    <h4 class="account-heading" font-family="Roboto">{{ user.first_name }} {{ user.last_name }}</h4>
+                    <h5 id="Info">@{{ user.username }}</h5>
+                    <h5 id="Info">Email - {{ user.email }}</h5>
+                </div>
+                <div align="right">
+                    {% if request.user.id == user.id %}
+                    <a class='btn btn-secondary btn-sm mt-1 mb-1' href="{% url 'update-profile' pk=user.id %}">Edit
+                        Profile</a>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Profile Info</legend>
-            {{ u_form|crispy }}
-            {{ p_form|crispy }}
-        </fieldset>
-        <div class="form-group">
-            <button class="btn btn-outline-info" type="submit">Update</button>
-        </div>
-    </form>
 </div>
 {% endblock content %}
+
+
+<!--New Profile Page Style-->
+
+<!--<div class="content-section">-->
+<!--<div class="media">-->
+<!--<div class="media-body">-->
+<!--<div class="row">-->
+<!--<div class="col">-->
+<!--<h4 class="account-heading" font-family="Roboto">{{ user.first_name }} {{ user.last_name }}</h4>-->
+<!--<h5 id="Info">@{{ user.username }}</h5>-->
+<!--<h5 id="Info">Email - {{ user.email }}</h5>-->
+<!--<h5 id="Info">Location - {{ user.profile.location }}</h5>-->
+<!--<h5 id="Info">About Me - {{ user.profile.bio }}</h5>-->
+<!--</div>-->
+<!--<div align="right">-->
+<!--{% if request.user.id == user.id %}-->
+<!--<a class='btn btn-secondary btn-sm mt-1 mb-1' href="{% url 'update-profile' pk=user.id %}">Edit Profile</a>-->
+<!--{% else %}-->
+<!--{% include 'main/follow_form.html' with username=user.username user_id=user.id is_following=is_following %}-->
+<!--{% endif %}-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->

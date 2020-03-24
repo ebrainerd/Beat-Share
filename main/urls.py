@@ -6,5 +6,5 @@ from . import views
 
 urlpatterns = [
     # path('', PostListViewHome.as_view(), name='main-home'),
-    path('', views.home, name='main-home'),
+    # path('', views.home, name='main-home'),
 ]

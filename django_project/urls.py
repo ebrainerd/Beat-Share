@@ -34,7 +34,8 @@ urlpatterns = [
     path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
     path('post/<int:pk>/delete/', login_required(PostDeleteView.as_view()), name='post-delete'),
     # path('search/', main_views.search, name="main-search"),
-    path('', include('main.urls')),
+    path('', main_views.home, name='main-home'),
+    # path('', include('main.urls')),
 ]
 
 if settings.DEBUG:

@@ -97,66 +97,19 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return False
 
 
-# class PostListViewHome(ListView):
-#     def get(self, request, *args, **kwargs):
-#         user = self.request.user
-#
-#         if not user.is_authenticated:
-#             message = "You are not logged in. Displaying all posts by default. " \
-#                       "Please sign in or register."
-#             messages.info(self.request, message)
-#             return render(request, 'main/home.html', {})
-#
-#         elif user.is_superuser:
-#             qs = Post.objects.all().order_by('-date_posted')
-#             message = "Logged in as administrator, " \
-#                       + "currently displaying all posts."
-#             messages.info(self.request, message)
-#             return render(request, 'main/home.html', {'posts': qs})
-#
-#         else:
-#             is_following_user_ids = [x.user.id for x in user.is_following.all()]
-#             qs = Post.objects.filter(author__user__id__in=is_following_user_ids).order_by('-date_posted')
-#             if len(qs) == 0:
-#                 messages.info(self.request, "There are no posts available to show. Follow other users or wait "
-#                               + "until one of the users you follow makes a post.")
-#             return render(request, 'main/home.html', {'posts': qs, 'user': user})
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Post
+    fields = ['title', 'description', 'song']
 
+    def form_valid(self, form):
+        form.instance.author = self.request.user.profile
+        return super().form_valid(form)
 
-# class PostCreateView(CreateView):
-#     model = Post
-#     fields = ['title', 'content', 'distance', 'time', 'location']
-#     success_url = '/'
-#
-#     def form_valid(self, form):
-#         form.instance.author = self.request.user.profile
-#         return super().form_valid(form)
-#
-#
-# class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-#     model = Post
-#     fields = ['title', 'content', 'distance', 'time', 'location']
-#
-#     def form_valid(self, form):
-#         form.instance.author = self.request.user.profile
-#         return super().form_valid(form)
-#
-#     def test_func(self):
-#         post = self.get_object()
-#         if self.request.user.profile == post.author or self.request.user.is_superuser:
-#             return True
-#         return False
-#
-#
-# class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-#     model = Post
-#     success_url = '/'
-#
-#     def test_func(self):
-#         post = self.get_object()
-#         if self.request.user.profile == post.author or self.request.user.is_superuser:
-#             return True
-#         return False
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user.profile == post.author or self.request.user.is_superuser:
+            return True
+        return False
 
 
 def register(request):
@@ -242,6 +195,14 @@ def add_comment_to_post(request, pk):
         form = CommentForm()
 
     return render(request, 'main/add_comment_to_post.html', {'form': form, 'post': post})
+
+
+@login_required
+def delete_comment(request, pk, cpk):
+    comment = get_object_or_404(Comment, comment_id=cpk)
+    if comment.author == request.user.profile or request.user.is_superuser:
+        comment.delete()
+    return redirect('post-detail', pk=pk)
 
 
 class ProfileFollowToggle(LoginRequiredMixin, View):

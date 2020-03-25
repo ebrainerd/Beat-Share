@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.urls import include
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -26,7 +25,8 @@ from main.views import (
     PostDetailView,
     PostCreateView,
     PostDeleteView,
-    ProfileFollowToggle
+    ProfileFollowToggle,
+    PostUpdateView
 )
 
 urlpatterns = [
@@ -38,12 +38,12 @@ urlpatterns = [
     path('profile/<int:pk>/update', main_views.update_profile, name="update-profile"),
     path('post/new/', login_required(PostCreateView.as_view()), name='post-create'),
     path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
-    # path('post/<int:pk>/', main_views.post_detail, name='post-detail'),
     path('post/<int:pk>/delete/', login_required(PostDeleteView.as_view()), name='post-delete'),
+    path('post/<int:pk>/update/', login_required(PostUpdateView.as_view()), name='post-update'),
     path('post/<int:pk>/comment/', main_views.add_comment_to_post, name='add_comment_to_post'),
+    path('post/<int:pk>/comment/delete/<int:cpk>', main_views.delete_comment, name='delete-comment'),
     path('profile/<int:pk>/profile-follow/', login_required(ProfileFollowToggle.as_view()), name='follow'),
     path('', main_views.home, name='main-home'),
-    # path('', include('main.urls')),
 ]
 
 if settings.DEBUG:

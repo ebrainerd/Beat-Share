@@ -14,6 +14,8 @@
             <div>
                 <a class='btn btn-danger btn-sm mt-1 mb-1' style="float: right;"
                    href="{% url 'post-delete' post.id %}">Delete Post</a>
+                <a class='btn btn-info btn-sm mt-1 mb-1' style="float: right;"
+                   href="{% url 'post-update' post.id %}">Update Post</a>
             </div>
             {% endif %}
         </div>
@@ -25,54 +27,31 @@
         </audio>
     </div>
 </article>
-
 <div>
-    <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
-
+    <article class="media">
+        <h6><a class="article-title" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a></h6>
+    </article>
     {% if post.comments.count == 0 %}
-
     <p>No comments</p>
-
     {% else %}
-
     {% for comment in post.comments.all %}
     <article class="media content-section">
-        <p>{{ comment }}</p>
+        <div class="media-body">
+            <article class="article-metadate">
+                {% if user.profile == comment.author or user.is_superuser %}
+                <div>
+                    <a class='btn btn-danger btn-sm mt-1 mb-1' style="float: right;"
+                    href="{% url 'delete-comment' pk=post.id cpk=comment.comment_id %}">Delete</a>
+                </div>
+                {% endif %}
+                <h7><a class="article-title" href="{% url 'profile' post.author.user.id %}">{{ comment.author }}</a>
+                </h7>
+                <small class="text-muted">{{ comment.date_posted }}</small>
+            </article>
+            <p>{{ comment }}</p>
+        </div>
     </article>
     {% endfor %}
-
     {% endif %}
 </div>
-
-<!--{% if post.comments.count == 0 %}-->
-
-<!--<div>-->
-<!--<p><h5>No comments yet</h5></p>-->
-<!--<form method="GET">-->
-<!--Leave a comment <input type="text" name="comment"><br/>-->
-<!--<input type="submit" value="Submit"/>-->
-<!--</form>-->
-<!--<br/><br/>-->
-
-<!--{% for comment in post.comments.all %}-->
-<!--<p>{{comment}}</p>-->
-<!--{% endfor %}-->
-<!--</div>-->
-
-<!--{% else %}-->
-
-<!--<div>-->
-<!--{% for comment in post.comments.all %}-->
-<!--<p>{{comment}}</p>-->
-<!--{% endfor %}-->
-
-<!--{% if user.is_authenticated %}-->
-<!--{% for comment in post.comments.all %}-->
-<!--<p>{{comment}}</p>-->
-<!--{% endfor %}-->
-<!--{% endif %}-->
-<!--</div>-->
-
-<!--{% endif %}-->
-
 {% endblock content %}

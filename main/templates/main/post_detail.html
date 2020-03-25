@@ -44,7 +44,7 @@
                     href="{% url 'delete-comment' pk=post.id cpk=comment.comment_id %}">Delete</a>
                 </div>
                 {% endif %}
-                <h7><a class="article-title" href="{% url 'profile' post.author.user.id %}">{{ comment.author }}</a>
+                <h7><a class="article-title" href="{% url 'profile' comment.author.user.id %}">{{ comment.author }}</a>
                 </h7>
                 <small class="text-muted">{{ comment.date_posted }}</small>
             </article>

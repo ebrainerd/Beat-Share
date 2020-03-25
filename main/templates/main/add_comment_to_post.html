@@ -13,7 +13,7 @@
         </fieldset>
         <div class="form-group">
             <input type="hidden" name="next" value="{{ request.path }}">
-            <a class="btn btn-outline-danger" href="{% url 'post-detail' pk=post.id %}">Cancel</a>
+            <a class="btn btn-outline-danger" href="{% url 'post-detail' post.id %}">Cancel</a>
             <button type="submit" class="btn btn-outline-info">Send</button>
         </div>
     </form>

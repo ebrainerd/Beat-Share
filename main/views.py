@@ -10,6 +10,7 @@ from django.views.generic import View, DetailView, ListView, UpdateView, CreateV
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentForm
 from django.http import Http404
 from django.db.models import Q
+from django.http import HttpResponseRedirect
 
 
 def home(request):
@@ -36,6 +37,10 @@ def home(request):
     }
 
     return render(request, 'main/home.html', context)
+
+
+def explore(request):
+    return render(request, 'main/explore.html', { 'posts': Post.objects.all().order_by('-date_posted') })
 
 
 class PostDetailView(DetailView):

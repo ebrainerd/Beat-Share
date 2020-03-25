@@ -1,15 +1,7 @@
 {% extends "main/base.html" %}
 {% block content %}
 
-{% if type == "reg" %}
-<h2>Home</h2>
-{% else %}
-<h4>Search Results</h4>
-{% endif %}
-
-{% if not posts and type == "search" %}
-<h5>No matching results.</h5>
-{% else %}
+<h2>Explore</h2>
 
 {% for post in posts %}
 <article class="media content-section">
@@ -32,7 +24,5 @@
     </div>
 </article>
 {% endfor %}
-
-{% endif %}
 
 {% endblock content %}

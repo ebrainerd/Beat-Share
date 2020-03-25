@@ -25,13 +25,17 @@ def home(request):
             Q(author__user__id=user.id)
         ).order_by('-date_posted')
 
+        allposts = Post.objects.all()
+
         display_type = "reg"
     else:
         posts = get_query_set(query)
         display_type = "search"
+        allposts = Post.objects.all()
 
     context = {
         'posts': posts,
+        'allposts': allposts,
         'type': display_type
     }
 

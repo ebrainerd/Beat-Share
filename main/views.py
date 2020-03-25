@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post, Profile
+from .models import Post, Profile, Comment
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.views.generic import View, DetailView, ListView, UpdateView, CreateView, DeleteView
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm #UserUpdateForm, ProfileUpdateForm
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentForm
 from django.http import Http404
 from django.db.models import Q
 
@@ -18,7 +18,13 @@ def home(request):
         query = request.GET['q']
 
     if query == "":
-        posts = Post.objects.all()
+        user = request.user
+        is_following_user_ids = [x.user.id for x in user.is_following.all()]
+        posts = Post.objects.filter(
+            Q(author__user__id__in=is_following_user_ids) |
+            Q(author__user__id=user.id)
+        ).order_by('-date_posted')
+
         display_type = "reg"
     else:
         posts = get_query_set(query)
@@ -30,6 +36,19 @@ def home(request):
     }
 
     return render(request, 'main/home.html', context)
+
+
+class PostDetailView(DetailView):
+    def get(self, request, *args, **kwargs):
+
+        pk = self.kwargs.get('pk')
+        post = get_object_or_404(Post, id=pk)
+
+        context = {
+            'post': post
+        }
+
+        return render(request, 'main/post_detail.html', context)
 
 
 def get_query_set(query=None):
@@ -65,10 +84,6 @@ class PostCreateView(CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user.profile
         return super().form_valid(form)
-
-
-class PostDetailView(DetailView):
-    model = Post
 
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -160,9 +175,8 @@ def register(request):
 
 class ProfileDetailView(DetailView):
     def get(self, request, *args, **kwargs):
-
         pk = self.kwargs.get('pk')
-        if pk == request.user.pk:
+        if pk == request.user.id:
             user_to_view = request.user
         elif pk is None:
             raise Http404("Could not get user.")
@@ -171,13 +185,17 @@ class ProfileDetailView(DetailView):
 
         posts = Post.objects.filter(author=user_to_view.profile).order_by('-date_posted')
 
+        is_following = False
+        if self.request.user.is_authenticated and user_to_view.profile in self.request.user.is_following.all():
+            is_following = True
+
         context = {
             'user': user_to_view,
-            'posts': posts
+            'posts': posts,
+            'is_following': is_following
         }
 
         return render(request, 'main/profile.html', context)
-
 
 
 @login_required
@@ -209,25 +227,25 @@ def update_profile(request, pk):
     return render(request, 'main/profile_update.html', context)
 
 
-# def add_comment_to_post(request, pk):
-#     post = get_object_or_404(Post, pk=pk)
-#
-#     if request.method == "POST":
-#         form = CommentForm(request.POST)
-#         if form.is_valid():
-#             comment = form.save(commit=False)
-#             comment.post = post
-#             comment.author = request.user.profile
-#             comment.save()
-#             return redirect('post-detail', pk=post.pk)
-#     else:
-#         form = CommentForm()
-#     return render(request, 'main/add_comment_to_post.html', {'form': form, 'post': post})
+def add_comment_to_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user.profile
+            comment.save()
+            return redirect('post-detail', pk=post.pk)
+    else:
+        form = CommentForm()
+
+    return render(request, 'main/add_comment_to_post.html', {'form': form, 'post': post})
 
 
-# class ProfileFollowToggle(LoginRequiredMixin, View):
-#     def post(self, request, *args, **kwargs):
-#         username_to_toggle = request.POST.get("username")
-#         profile_, is_following = Profile.objects.toggle_follow(request.user, username_to_toggle)
-#
-#         return redirect('user-profile', profile_.user.id)
+class ProfileFollowToggle(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        username_to_toggle = request.POST.get("username")
+        profile_, is_following = Profile.objects.toggle_follow(request.user, username_to_toggle)
+        return redirect('profile', profile_.user.id)

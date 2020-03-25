@@ -1,0 +1,20 @@
+{% extends "main/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h1>New comment</h1>
+    <p><b>WARNING:</b> You cannot delete or update a comment once it has been posted!</p>
+    <form method="POST">
+
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">New Comment</legend>
+            {{ form|crispy }}
+        </fieldset>
+        <div class="form-group">
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <a class="btn btn-outline-danger" href="{% url 'post-detail' pk=post.id %}">Cancel</a>
+            <button type="submit" class="btn btn-outline-info">Send</button>
+        </div>
+    </form>
+{% endblock %}

@@ -2,7 +2,7 @@
 {% block content %}
 
 {% if type == "reg" %}
-<h2>Home Feed</h2>
+<h2>Home</h2>
 {% endif %}
 
 {% if not posts and type == "search" %}
@@ -15,7 +15,7 @@
     <div class="media-body">
         <div class="article-metadata">
             {% if user.is_authenticated %}
-            <a class="mr-2" href="{% url 'profile' pk=post.author.pk %}">{{ post.author }}</a>
+            <a class="mr-2" href="{% url 'profile' post.author.user.id %}">{{ post.author }}</a>
             {% else %}
             <h5>{{ post.author }}</h5>
             {% endif %}

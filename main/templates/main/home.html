@@ -1,8 +1,10 @@
 {% extends "main/base.html" %}
+
 {% block content %}
 
+
 {% if type == "reg" %}
-<h2>Home</h2>
+<h2>Subscription Posts</h2>
 {% else %}
 <h4>Search Results</h4>
 {% endif %}
@@ -10,6 +12,7 @@
 {% if not posts and type == "search" %}
 <h5>No matching results.</h5>
 {% else %}
+
 
 {% for post in posts %}
 <article class="media content-section">
@@ -25,10 +28,12 @@
         </div>
         <h4><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h4>
         <p class="article-content">{{ post.description }}</p>
+
         <audio controls>
             <source src="{{ post.song.url }}" type="audio/mp3">
             Your browser does not support the audio element.
         </audio>
+
     </div>
 </article>
 {% endfor %}

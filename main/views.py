@@ -1,16 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, Profile, Comment
-from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, authenticate
 from django.views.generic import View, DetailView, ListView, UpdateView, CreateView, DeleteView
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentForm
 from django.http import Http404
 from django.db.models import Q
-from django.http import HttpResponseRedirect
 
 
 def home(request):
@@ -20,13 +17,20 @@ def home(request):
 
     if query == "":
         user = request.user
-        is_following_user_ids = [x.user.id for x in user.is_following.all()]
-        posts = Post.objects.filter(
-            Q(author__user__id__in=is_following_user_ids) |
-            Q(author__user__id=user.id)
-        ).order_by('-date_posted')
+
+        if user.is_authenticated:
+            is_following_user_ids = [x.user.id for x in user.is_following.all()]
+            posts = Post.objects.filter(
+                Q(author__user__id__in=is_following_user_ids) |
+                Q(author__user__id=user.id)
+            ).order_by('-date_posted')
+
+        else:
+            messages.info(request, f'Log in to see posts from subscriptions')
+            posts = []
 
         display_type = "reg"
+
     else:
         posts = get_query_set(query)
         display_type = "search"

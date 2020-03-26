@@ -82,3 +82,30 @@ a.article-title:hover {
 .account-heading {
   font-size: 2.5rem;
 }
+
+div#audio_tag {
+  padding: 100px;
+}
+
+div#mp3_player {
+  width: 500px;
+  height: 60px;
+  background: #5f788a;
+  padding: 5px;
+  margin: 50px auto;
+}
+
+div#mp3_player > div > audio {
+  width: 500px;
+  background: #000;
+  float: left;
+}
+
+div#mp3_player > canvas {
+  width: 500px;
+  height: 30px;
+  background: #002D3C;
+  float: left;
+}
+
+

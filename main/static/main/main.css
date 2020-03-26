@@ -108,4 +108,7 @@ div#mp3_player > canvas {
   float: left;
 }
 
-
+a#download {
+  color: #5f788a;
+  margin-left: 40%;
+}

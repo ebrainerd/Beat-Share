@@ -23,7 +23,7 @@
 <header class="site-header">
     <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
-            <a class="navbar-brand mr-4" href="{% url 'main-home' %}">Beat Share</a>
+            <a class="navbar-brand mr-4" href="{% url 'explore' %}">Beat Share</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
                     aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -38,8 +38,8 @@
                 </div>
                 <!-- Navbar Right Side -->
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="{% url 'main-home' %}">Subscriptions</a>
                     <a class="nav-item nav-link" href="{% url 'explore' %}">Explore</a>
+                    <a class="nav-item nav-link" href="{% url 'subscriptions' %}">Subscriptions</a>
                     {% if user.is_authenticated %}
                     <a class="nav-item nav-link" href="{% url 'post-create' %}">New Post</a>
                     <a class="nav-item nav-link" href="{% url 'profile' request.user.id %}">Profile</a>

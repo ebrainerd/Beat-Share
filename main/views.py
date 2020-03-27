@@ -33,6 +33,10 @@ def home(request):
         ).order_by('-date_posted')
 
         if query == "":
+            if len(is_following_user_ids) is 0:
+                messages.info(request, f'Follow others to see their posts here')
+            elif len(posts) is 0:
+                messages.info(request, f'No posts to display')
             display_type = "reg"
 
         else:
@@ -44,7 +48,7 @@ def home(request):
         'type': display_type
     }
 
-    return render(request, 'main/home.html', context)
+    return render(request, 'main/subscriptions.html', context)
 
 
 def explore(request):
@@ -55,6 +59,8 @@ def explore(request):
     posts = Post.objects.all()
 
     if query == "":
+        if len(posts) is 0:
+            messages.info(request, f'No posts to display')
         display_type = "reg"
 
     else:
@@ -102,7 +108,7 @@ def get_query_set(posts, query=None):
 
 class PostListViewHome(ListView):
     model = Post
-    template_name = 'main/home.html'
+    template_name = 'main/subscriptions.html'
     context_object_name = 'posts'
     ordering = ['-date_posted']
 

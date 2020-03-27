@@ -3,9 +3,9 @@
     <input type='hidden' name='username' value='{{ username }}'/>
     <button class='btn {% if is_following %}btn-danger{% else %}btn-primary{% endif %}'>
         {% if is_following %}
-        Unfollow
+        Unsubscribe
         {% else %}
-        Follow
+        Subscribe
         {% endif %}
     </button>
 </form>

@@ -8,6 +8,7 @@ from django.views.generic import View, DetailView, ListView, UpdateView, CreateV
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentForm
 from django.http import Http404
 from django.db.models import Q
+from django.http import HttpResponseRedirect
 
 
 def home(request):
@@ -75,18 +76,6 @@ def explore(request):
     return render(request, 'main/explore.html', context)
 
 
-class PostDetailView(DetailView):
-    def get(self, request, *args, **kwargs):
-        pk = self.kwargs.get('pk')
-        post = get_object_or_404(Post, id=pk)
-
-        context = {
-            'post': post
-        }
-
-        return render(request, 'main/post_detail.html', context)
-
-
 def get_query_set(posts, query=None):
     queryset = []
     queries = query.split(" ")
@@ -104,6 +93,18 @@ def get_query_set(posts, query=None):
             queryset.append(post)
 
     return list(set(queryset))
+
+
+class PostDetailView(DetailView):
+    def get(self, request, *args, **kwargs):
+        pk = self.kwargs.get('pk')
+        post = get_object_or_404(Post, id=pk)
+
+        context = {
+            'post': post
+        }
+
+        return render(request, 'main/post_detail.html', context)
 
 
 class PostListViewHome(ListView):
@@ -147,6 +148,12 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         if self.request.user.profile == post.author or self.request.user.is_superuser:
             return True
         return False
+
+
+def increment_num_plays(request, pk):
+    print("here")
+    return redirect('login')
+    # return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 def register(request):

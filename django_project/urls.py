@@ -45,6 +45,7 @@ urlpatterns = [
     path('post/<int:pk>/comment/delete/<int:cpk>', main_views.delete_comment, name='delete-comment'),
     path('profile/<int:pk>/profile-follow/', login_required(ProfileFollowToggle.as_view()), name='follow'),
     path('subscriptions/', main_views.home, name='subscriptions'),
+    path('increment_post_plays/<int:pk>', main_views.increment_num_plays, name='increment_num_plays'),
     path('', main_views.explore, name='explore'),
 ]
 

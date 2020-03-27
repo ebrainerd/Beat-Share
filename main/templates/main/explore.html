@@ -1,7 +1,6 @@
 {% extends "main/base.html" %}
 {% block content %}
 
-
 {% if type == "reg" %}
 <h2>Explore</h2>
 {% else %}
@@ -12,32 +11,9 @@
 <h5>No matching results.</h5>
 {% else %}
 
-
 {% for post in posts %}
-<article class="media content-section">
-    <img class="rounded-circle article-img" src="{{ post.author.image.url }}">
-    <div class="media-body">
-        <div class="article-metadata">
-            {% if user.is_authenticated %}
-            <a class="mr-2" href="{% url 'profile' post.author.user.id %}">{{ post.author }}</a>
-            {% else %}
-            <h5>{{ post.author }}</h5>
-            {% endif %}
-            <small class="text-muted"> {{ post.date_posted }}</small>
-        </div>
-        <h4><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h4>
-        <p class="article-content">{{ post.description }}</p>
-        <audio controls>
-            <source src="{{ post.song.url }}" type="audio/mp3">
-            Your browser does not support the audio element.
-        </audio>
-
-        <a id='download' href="{{ post.song.url }}" download>Download</a>
-
-    </div>
-</article>
+    {% include "main/post.html" with post=post %}
 {% endfor %}
 
 {% endif %}
-
 {% endblock content %}

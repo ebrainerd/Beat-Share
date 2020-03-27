@@ -23,6 +23,8 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
     followers = models.ManyToManyField(User, symmetrical=False, related_name='is_following', blank=True)
+    song_plays = models.IntegerField(blank=False, default=0)
+    song_downloads = models.IntegerField(blank=False, default=0)
 
     objects = ProfileManager()
 
@@ -46,6 +48,8 @@ class Post(models.Model):
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(Profile, on_delete=models.CASCADE)
     song = models.FileField(blank=False, default=None, upload_to='audio')
+    num_plays = models.IntegerField(blank=False, default=0)
+    num_downloads = models.IntegerField(blank=False, default=0)
 
     @property
     def comments(self):

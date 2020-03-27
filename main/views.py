@@ -15,25 +15,29 @@ def home(request):
     if request.GET:
         query = request.GET['q']
 
-    if query == "":
-        user = request.user
+    user = request.user
 
-        if user.is_authenticated:
-            is_following_user_ids = [x.user.id for x in user.is_following.all()]
-            posts = Post.objects.filter(
-                Q(author__user__id__in=is_following_user_ids) |
-                Q(author__user__id=user.id)
-            ).order_by('-date_posted')
-
-        else:
+    if not user.is_authenticated:
+        if query == "":
+            display_type = "reg"
             messages.info(request, f'Log in to see posts from subscriptions')
-            posts = []
+        else:
+            display_type = "search"
 
-        display_type = "reg"
+        posts = []
 
     else:
-        posts = get_query_set(query)
-        display_type = "search"
+        is_following_user_ids = [x.user.id for x in user.is_following.all()]
+        posts = Post.objects.filter(
+            Q(author__user__id__in=is_following_user_ids)
+        ).order_by('-date_posted')
+
+        if query == "":
+            display_type = "reg"
+
+        else:
+            posts = get_query_set(posts, query)
+            display_type = "search"
 
     context = {
         'posts': posts,
@@ -44,12 +48,29 @@ def home(request):
 
 
 def explore(request):
-    return render(request, 'main/explore.html', { 'posts': Post.objects.all().order_by('-date_posted') })
+    query = ""
+    if request.GET:
+        query = request.GET['q']
+
+    posts = Post.objects.all()
+
+    if query == "":
+        display_type = "reg"
+
+    else:
+        posts = get_query_set(posts, query)
+        display_type = "search"
+
+    context = {
+        'posts': posts,
+        'type': display_type
+    }
+
+    return render(request, 'main/explore.html', context)
 
 
 class PostDetailView(DetailView):
     def get(self, request, *args, **kwargs):
-
         pk = self.kwargs.get('pk')
         post = get_object_or_404(Post, id=pk)
 
@@ -60,11 +81,12 @@ class PostDetailView(DetailView):
         return render(request, 'main/post_detail.html', context)
 
 
-def get_query_set(query=None):
+def get_query_set(posts, query=None):
     queryset = []
     queries = query.split(" ")
+
     for q in queries:
-        posts = Post.objects.filter(
+        posts = posts.filter(
             Q(title__icontains=q) |
             Q(description__icontains=q) |
             Q(author__user__username__icontains=q) |

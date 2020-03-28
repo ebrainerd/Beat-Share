@@ -57,7 +57,7 @@ def explore(request):
     if request.GET:
         query = request.GET['q']
 
-    posts = Post.objects.all()
+    posts = Post.objects.all().order_by('-date_posted')
 
     if query == "":
         if len(posts) is 0:

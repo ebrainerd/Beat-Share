@@ -1,6 +1,7 @@
 from .models import Post, Profile
 from django.http import JsonResponse
 
+
 def increment_song_plays(request):
     if request.is_ajax():
         post_id = request.GET['post_id']

@@ -41,6 +41,10 @@ class Profile(models.Model):
             img.save(self.image.path)
 
 
+class PostManager(models.Manager):
+    pass
+
+
 # Create your models here.
 class Post(models.Model):
     title = models.CharField(max_length=500, blank=False)
@@ -50,6 +54,8 @@ class Post(models.Model):
     song = models.FileField(blank=False, default=None, upload_to='audio')
     num_plays = models.IntegerField(blank=False, default=0)
     num_downloads = models.IntegerField(blank=False, default=0)
+
+    objects = PostManager()
 
     @property
     def comments(self):
@@ -65,12 +71,18 @@ class Post(models.Model):
         return '{} by {}'.format(self.title, self.author)
 
 
+class CommentManager(models.Manager):
+    pass
+
+
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     comment_id = models.AutoField(primary_key=True)
     author = models.ForeignKey(Profile, on_delete=models.CASCADE)
     content = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)
+
+    objects = CommentManager()
 
     class Meta:
         ordering = ['-date_posted']

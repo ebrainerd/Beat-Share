@@ -18,33 +18,7 @@
     <!--Problem is having the wrong version of jquery-->
 
     <script type="text/javascript" src="{{ STATIC_URL }} /static/js/jquery-3.4.1.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $(".increment-song-plays").on("playing", function(e){
-
-                e.preventDefault();
-
-                var post_id;
-                post_id = $(this).attr("data-postid");
-
-                $.ajax(
-                {
-                    url: "{% url 'increment-song-plays' %}",
-                    type: "GET",
-                    data: {
-                        'post_id' : post_id
-                    },
-                    success: function()
-                    {
-                        console.log("Success");
-                    },
-                    error: function() {
-                        console.log("Failure");
-                    }
-                });
-            });
-        });
-    </script>
+    <script type="text/javascript" src="{{ STATIC_URL }} /static/js/ajax.js"></script>
 
 </head>
 
@@ -95,18 +69,7 @@
             {% endif %}
             {% block content %}{% endblock %}
         </div>
-        <div class="col-md-4">
-            <div class="content-section">
-                <h3>The Best This Week</h3>
-                <p class='text-muted'>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-light">Top Artist:</li>
-                    <li class="list-group-item list-group-item-light">Top Song:</li>
-                    <li class="list-group-item list-group-item-light">Most Downloaded:</li>
-                </ul>
-                </p>
-            </div>
-        </div>
+        {% block sidebar %}{% endblock %}
     </div>
 </main>
 

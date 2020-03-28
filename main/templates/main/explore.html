@@ -12,8 +12,25 @@
 {% else %}
 
 {% for post in posts %}
-    {% include "main/post.html" with post=post %}
+{% include "main/post.html" with post=post %}
 {% endfor %}
 
 {% endif %}
 {% endblock content %}
+
+{% block sidebar %}
+
+<div class="col-md-4">
+    <div class="content-section">
+        <h3>Best of the Best</h3>
+        <p class='text-muted'>
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-light"><b>Top Song:</b> {{ top_artist }}</li>
+            <li class="list-group-item list-group-item-light"><b>Top Artist:</b> {{ top_song }}</li>
+            <li class="list-group-item list-group-item-light"><b>Most Downloaded:</b> {{ most_downloaded }}</li>
+        </ul>
+        </p>
+    </div>
+</div>
+
+{% endblock sidebar %}

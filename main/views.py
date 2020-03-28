@@ -8,8 +8,7 @@ from django.views.generic import View, DetailView, ListView, UpdateView, CreateV
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentForm
 from django.http import Http404
 from django.db.models import Q
-from django.http import JsonResponse, HttpResponse
-from django.http import HttpResponseRedirect
+from main.utils import *
 
 
 def home(request):
@@ -69,9 +68,14 @@ def explore(request):
         posts = get_query_set(posts, query)
         display_type = "search"
 
+    top_artist, top_song, most_downloaded = get_top_stats()
+
     context = {
         'posts': posts,
-        'type': display_type
+        'type': display_type,
+        'top_artist': top_artist,
+        'top_song': top_song,
+        'most_downloaded': most_downloaded
     }
 
     return render(request, 'main/explore.html', context)
@@ -106,18 +110,6 @@ class PostDetailView(DetailView):
         }
 
         return render(request, 'main/post_detail.html', context)
-
-
-def increment_song_plays(request):
-    if request.is_ajax():
-        post_id = request.GET['post_id']
-        post = Post.objects.get(pk=post_id)
-        post.num_plays += 1
-        post.save()
-        return JsonResponse({'status': 'Success', 'msg': 'save successfully'})
-
-    else:
-        return JsonResponse({'status': 'Fail', 'msg': 'Not a valid request'})
 
 
 class PostListViewHome(ListView):

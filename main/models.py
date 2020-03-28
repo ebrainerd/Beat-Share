@@ -62,7 +62,7 @@ class Post(models.Model):
         return reverse('post-detail', kwargs={'pk': self.pk})
 
     def __str__(self):
-        return self.title
+        return '{} by {}'.format(self.title, self.author)
 
 
 class Comment(models.Model):

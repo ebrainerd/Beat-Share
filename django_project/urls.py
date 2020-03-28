@@ -20,6 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.decorators import login_required
 from main import views as main_views
+from main import ajax
 from main.views import (
     ProfileDetailView,
     PostDetailView,
@@ -44,19 +45,11 @@ urlpatterns = [
     path('post/<int:pk>/comment/delete/<int:cpk>', main_views.delete_comment, name='delete-comment'),
     path('profile/<int:pk>/profile-follow/', login_required(ProfileFollowToggle.as_view()), name='follow'),
     path('subscriptions/', main_views.home, name='subscriptions'),
-    path('increment-song-plays/', main_views.increment_song_plays, name='increment-song-plays'),
+    path('increment-song-plays/', ajax.increment_song_plays, name='increment-song-plays'),
+    path('increment-song-downloads/', ajax.increment_song_downloads, name='increment-song-downloads'),
+    path('increment-profile-plays/', ajax.increment_profile_plays, name='increment-profile-plays'),
     path('', main_views.explore, name='explore'),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
-
-
-
-
-
-
-
-

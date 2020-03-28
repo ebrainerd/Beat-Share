@@ -1,3 +1,6 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/post.css' %}">
+
 <article class="media content-section">
     <img class="rounded-circle article-img" src="{{ post.author.image.url }}">
     <div class="media-body">

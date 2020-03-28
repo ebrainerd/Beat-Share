@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <link rel="stylesheet" type="text/css" href="{% static 'main/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'main/base.css' %}">
 
     <title>Beat Share</title>
 
@@ -23,55 +23,35 @@
 </head>
 
 <body>
-<header class="site-header">
-    <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
-        <div class="container">
-            <a class="navbar-brand mr-4" href="{% url 'explore' %}">Beat Share</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
-                    aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarToggle">
-                <div class="navbar-nav mr-auto">
-                    <div class="search-bar mr-2">
-                        <form method="get">
-                            <input type="text" class="form-control" name="q" id="id_q" placeholder="Search...">
-                        </form>
-                    </div>
-                </div>
-                <!-- Navbar Right Side -->
-                <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="{% url 'explore' %}">Explore</a>
-                    <a class="nav-item nav-link" href="{% url 'subscriptions' %}">Subscriptions</a>
-                    {% if user.is_authenticated %}
-                    <a class="nav-item nav-link" href="{% url 'post-create' %}">New Post</a>
-                    <a class="nav-item nav-link" href="{% url 'profile' request.user.id %}">Profile</a>
-                    <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
-                    {% else %}
-                    <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
-                    <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </nav>
-</header>
 
-<main role="main" class="container">
-    <div class="row">
-        <div class="col-md-8">
-            {% if messages %}
-            {% for mes in messages %}
-            <div class="alert alert-{{ mes.tags }}">
-                {{ mes }}
-            </div>
-            {% endfor %}
-            {% endif %}
-            {% block content %}{% endblock %}
-        </div>
-        {% block sidebar %}{% endblock %}
+<div class="row">
+    <div class="column" style="background-color:#aaa;">
+        {% block left %}{% endblock %}
+        <!--<div class="logo">BeatShare</div>-->
+        <!--{% if user.is_authenticated %}-->
+            <!--<div class="profile">Registration</div>-->
+            <!--<div class="options">Options</div>-->
+        <!--{% endif %}-->
     </div>
-</main>
+    <div class="column" style="background-color:#bbb;">
+        {% block middle %}{% endblock %}
+        <!--{% if user.is_authenticated %}-->
+            <!--<div class="stream-header">Stream</div>-->
+            <!--<div class="song-feed">Songs</div>-->
+        <!--{% else %}-->
+            <!--<div class="login">login</div>-->
+            <!--<div class="register">register</div>-->
+        <!--{% endif %}-->
+    </div>
+    <div class="column" style="background-color:#ccc;">
+        {% block right %}{% endblock %}
+        <!--{% if user.is_authenticated %}-->
+            <!--<div class="music-header">Music</div>-->
+            <!--<div class="music-player">Music Player</div>-->
+            <!--<div class="queue">Queue</div>-->
+        <!--{% endif %}-->
+    </div>
+</div>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

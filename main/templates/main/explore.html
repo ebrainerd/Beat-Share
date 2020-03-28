@@ -1,6 +1,10 @@
 {% extends "main/base.html" %}
 {% block content %}
 
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/explore.css' %}">
+
+
 {% if type == "reg" %}
 <h2>Explore</h2>
 {% else %}

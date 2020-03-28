@@ -1,0 +1,30 @@
+{% extends "main/base.html" %}
+
+
+{% block left  %}
+
+{% if user.is_authenticated %}
+{% include left.html %}
+{% endif %}
+
+{% endblock left %}
+
+
+{% block middle  %}
+
+{% if user.is_authenticated %}
+{% include middle.html %}
+{% else %}
+{% include login.html %}
+{% endif %}
+
+{% endblock middle %}
+
+
+{% block right  %}
+
+{% if user.is_authenticated %}
+{% include right.html %}
+{% endif %}
+
+{% endblock left %}

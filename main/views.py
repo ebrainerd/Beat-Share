@@ -8,6 +8,7 @@ from django.views.generic import View, DetailView, ListView, UpdateView, CreateV
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentForm
 from django.http import Http404
 from django.db.models import Q
+from django.http import JsonResponse, HttpResponse
 from django.http import HttpResponseRedirect
 
 
@@ -107,6 +108,18 @@ class PostDetailView(DetailView):
         return render(request, 'main/post_detail.html', context)
 
 
+def increment_song_plays(request):
+    if request.is_ajax():
+        post_id = request.GET['post_id']
+        post = Post.objects.get(pk=post_id)
+        post.num_plays += 1
+        post.save()
+        return JsonResponse({'status': 'Success', 'msg': 'save successfully'})
+
+    else:
+        return JsonResponse({'status': 'Fail', 'msg': 'Not a valid request'})
+
+
 class PostListViewHome(ListView):
     model = Post
     template_name = 'main/subscriptions.html'
@@ -148,12 +161,6 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         if self.request.user.profile == post.author or self.request.user.is_superuser:
             return True
         return False
-
-
-def increment_num_plays(request, pk):
-    print("here")
-    return redirect('login')
-    # return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 def register(request):

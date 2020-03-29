@@ -24,33 +24,15 @@
 
 <body>
 
-<div class="row">
-    <div class="column" style="background-color:#aaa;">
-        {% block left %}{% endblock %}
-        <!--<div class="logo">BeatShare</div>-->
-        <!--{% if user.is_authenticated %}-->
-            <!--<div class="profile">Registration</div>-->
-            <!--<div class="options">Options</div>-->
-        <!--{% endif %}-->
-    </div>
-    <div class="column" style="background-color:#bbb;">
-        {% block middle %}{% endblock %}
-        <!--{% if user.is_authenticated %}-->
-            <!--<div class="stream-header">Stream</div>-->
-            <!--<div class="song-feed">Songs</div>-->
-        <!--{% else %}-->
-            <!--<div class="login">login</div>-->
-            <!--<div class="register">register</div>-->
-        <!--{% endif %}-->
-    </div>
-    <div class="column" style="background-color:#ccc;">
-        {% block right %}{% endblock %}
-        <!--{% if user.is_authenticated %}-->
-            <!--<div class="music-header">Music</div>-->
-            <!--<div class="music-player">Music Player</div>-->
-            <!--<div class="queue">Queue</div>-->
-        <!--{% endif %}-->
-    </div>
+<div class="left">
+    <h1 id="logo">Beat Share</h1>
+    {% block left %}{% endblock %}
+</div>
+<div class="middle">
+    {% block middle %}{% endblock %}
+</div>
+<div class="right">
+    {% block right %}{% endblock %}
 </div>
 
 <!-- Optional JavaScript -->

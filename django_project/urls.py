@@ -48,7 +48,7 @@ urlpatterns = [
     path('increment-song-plays/', ajax.increment_song_plays, name='increment-song-plays'),
     path('increment-song-downloads/', ajax.increment_song_downloads, name='increment-song-downloads'),
     path('increment-profile-plays/', ajax.increment_profile_plays, name='increment-profile-plays'),
-    path('', main_views.explore, name='explore'),
+    path('', main_views.home, name='home'),
 ]
 
 if settings.DEBUG:

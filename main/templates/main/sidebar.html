@@ -1,0 +1,51 @@
+{% if user.is_authenticated %}
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/sidebar.css' %}">
+
+<br>
+<div class="left-container">
+    <div class="profile">
+        <img src="{{ user.profile.image.url }}">
+        <p class="username">{{ user.first_name }} {{ user.last_name }}</p>
+    </div>
+
+    <br>
+
+    <div class="explore">
+        <h3 class="explore-header">Explore</h3>
+        <ul class="explore-list">
+            <li>
+                <a href="{% url 'home' %}">
+                    <div class="list-item">
+                        Home
+                    </div>
+                </a>
+            </li>
+            <li>Subscriptions</li>
+            <li>
+                <a href="{% url 'profile' user.id %}">
+                    <div class="list-item">
+                        Profile
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'post-create' %}">
+                    <div class="list-item">
+                        Upload
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'logout' %}?next=/login">
+                    <div class="list-item">
+                        Logout
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+{% endif %}

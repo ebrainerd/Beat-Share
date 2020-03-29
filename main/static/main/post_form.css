@@ -1,0 +1,14 @@
+.post-form-container {
+    height: 600px;
+}
+
+.post-form {
+    padding: 20px;
+    background-color: #EEEEEE;
+    border-radius: 10px;
+    text-align: left;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10%;
+}

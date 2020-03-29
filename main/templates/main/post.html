@@ -1,35 +1,18 @@
+{% block middle  %}
+
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'main/post.css' %}">
 
-<article class="media content-section">
-    <img class="rounded-circle article-img" src="{{ post.author.image.url }}">
-    <div class="media-body">
-        <div class="article-metadata">
-            {% if user.is_authenticated %}
-            <a class="mr-2" href="{% url 'profile' post.author.user.id %}">{{ post.author }}</a>
-            {% else %}
-            <h5>{{ post.author }}</h5>
-            {% endif %}
-            <small class="text-muted"> {{ post.date_posted }}</small>
-            <small style="float: right;">- Views: {{ post.num_plays }}</small>
-            <small style="float: right;">Downloads: {{ post.num_downloads }} -</small>
-        </div>
-        <h4><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h4>
-        <p class="article-content">{{ post.description }}</p>
-
-        <div class="row">
-            <audio class="increment-song-plays" data-postid="{{ post.id }}" data-profileid="{{ post.author.id }}"
-                   controls>
-                <source src="{{ post.song.url }}" type="audio/mp3">
-                Your browser does not support the audio element.
-            </audio>
-
-            <a class="increment-song-downloads"
-               id='download'
-               data-postid="{{ post.id }}"
-               href="{{ post.song.url }}"
-               download> Download </a>
-
-        </div>
+<div class="post-container">
+    <img src="{{ STATIC_URL }} static/main/css_images/artwork-default.png">
+    <div class="song-info">
+        <div class="title"><a style="color: #EEEEEE;">{{ post.title }}</a></div>
+        <div class="artist"><a style="color: #EEEEEE;">{{ post.author.user.first_name }} {{ post.author.user.last_name }}</a></div>
     </div>
-</article>
+    <audio class="increment-song-plays audio" data-postid="{{ post.id }}" data-profileid="{{ post.author.id }}" controls>
+        <source src="{{ post.song.url }}" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+</div>
+
+{% endblock middle %}

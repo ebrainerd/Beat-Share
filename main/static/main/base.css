@@ -1,17 +1,42 @@
-* {
-  box-sizing: border-box;
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
+
+html {
+    background: #EEEEEE;
 }
 
-/* Create three equal columns that floats next to each other */
-.column {
+body {
+  margin: 0;
+  /* This is used to reset any browser-default margins */
+  height: 100vh;
+  /* This is needed to overcome a Chrome bug. */
+  width: 100vw;
+  /* As above. */
+  font-family: 'Montserrat';
+}
+
+.left {
+  height: 100vh;
+  width: 25%;
+  background-image: linear-gradient(to right, DarkSlateGray , LightSlateGray);
   float: left;
-  width: 33.33%;
-  padding: 10px;
 }
 
-/* Clear floats after the columns */
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
+.middle {
+  height: 100vh;
+  width: 50%;
+  background-image: linear-gradient(to right, LightSlateGray , LightSlateGray);
+  float: left;
+}
+
+.right {
+  height: 100vh;
+  width: 25%;
+  background-image: linear-gradient(to right, LightSlateGray , DarkSlateGray);
+  float: left;
+}
+
+#logo {
+  color: #EEEEEE;
+  margin-left: 30px;
+  margin-top: 20px;
 }

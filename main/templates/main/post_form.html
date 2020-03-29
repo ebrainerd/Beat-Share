@@ -1,18 +1,24 @@
-{% extends "main/base.html" %}
+{% extends "main/home.html" %}
 {% load crispy_forms_tags %}
 
-{% block content %}
-    <div class="content-section">
+{% block middle %}
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/post_form.css' %}">
+
+<div class="post-form-container">
+    <div class="post-form">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Post to Sound Share</legend>
+                <legend class="border-bottom mb-4">Post to Beat Share</legend>
                 {{ form|crispy }}
             </fieldset>
             <div class="form-group">
-                <a class="btn btn-outline-danger" href="{% url 'explore' %}">Cancel</a>
+                <a class="btn btn-outline-danger" href="{% url 'home' %}">Cancel</a>
                 <button class="btn btn-outline-info" type="submit">Post</button>
             </div>
         </form>
     </div>
-{% endblock content %}
+</div>
+{% endblock middle %}

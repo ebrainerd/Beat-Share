@@ -16,40 +16,24 @@ def home(request):
     if request.GET:
         query = request.GET['q']
 
-    user = request.user
+    posts = Post.objects.all().order_by('-date_posted')
 
-    if not user.is_authenticated:
-        if query == "":
-            display_type = "reg"
-            messages.info(request, f'Log in to see posts from subscriptions')
-        else:
-            display_type = "search"
-
-        posts = []
+    if query == "":
+        if len(posts) is 0:
+            messages.info(request, f'No posts to display')
+        display_type = "reg"
 
     else:
-        is_following_user_ids = [x.user.id for x in user.is_following.all()]
-        posts = Post.objects.filter(
-            Q(author__user__id__in=is_following_user_ids)
-        ).order_by('-date_posted')
-
-        if query == "":
-            if len(is_following_user_ids) is 0:
-                messages.info(request, f'Follow others to see their posts here')
-            elif len(posts) is 0:
-                messages.info(request, f'No posts to display')
-            display_type = "reg"
-
-        else:
-            posts = get_query_set(posts, query)
-            display_type = "search"
+        posts = get_query_set(posts, query)
+        display_type = "search"
 
     context = {
         'posts': posts,
-        'type': display_type
+        'type': display_type,
+        'query': query
     }
 
-    return render(request, 'main/subscriptions.html', context)
+    return render(request, 'main/home.html', context)
 
 
 def explore(request):

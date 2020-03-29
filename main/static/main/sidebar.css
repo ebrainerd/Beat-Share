@@ -1,0 +1,63 @@
+.left-container {
+    margin-left: 20px;
+}
+
+.profile {
+    margin-left: 10px;
+    margin-top: 20px;
+    width: 300px;
+    height: 50px;
+    border-radius: 5px;
+}
+
+div.profile img {
+    height: 50px;
+    width: 50px;
+    float: left;
+}
+
+.username {
+    color: white;
+    font-size: 24px;
+    float: left;
+    margin-top: 8px;
+    margin-bottom: 0;
+    margin-left: 20px;
+}
+
+
+
+.explore {
+    padding-left: 10px;
+    width: 300px;
+    height: 120px;
+    margin-top: 30px;
+    margin-bottom: 0;
+}
+
+.explore h3 {
+    color: #EEEEEE;
+}
+
+.explore ul {
+    color: #EEEEEE;
+    list-style-type: none;
+}
+
+.explore li {
+    color: white;
+    margin: 50px 0 50px 0;
+}
+
+.explore li a{
+    text-decoration: none;
+}
+
+.list-item {
+    color: white;
+    text-decoration: none;
+}
+
+.list-item:hover {
+    text-decoration: none;
+}

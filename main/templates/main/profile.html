@@ -1,45 +1,30 @@
 {% extends "main/base.html" %}
 {% load crispy_forms_tags %}
 
-<!--CSS Styling Legend-->
-<style>
-#Info {
-    color: black;
-    text-align: left;
-    font-family: "Helvetica Neue";
-}
+{% block left %}
+{% include 'main/sidebar.html' %}
+{% endblock left %}
 
-</style>
 
-{% block content %}
-<div class="content-section">
-    <div class="media">
-        <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
-        <div class="media-body">
-            <div class="row">
-                <div class="col">
-                    <h4 class="account-heading" font-family="Roboto">{{ user.first_name }} {{ user.last_name }}</h4>
-                    <h5 id="Info">@{{ user.username }}</h5>
-                    <h5 id="Info">Email - {{ user.email }}</h5>
-                </div>
-                <div align="right">
-                    {% if request.user.id == user.id %}
-                    <a class='btn btn-secondary btn-sm mt-1 mb-1' href="{% url 'update-profile' pk=user.id %}">
-                        Edit Profile</a>
-                    {% else %}
-                    {% include 'main/follow_form.html' with username=user.username user_id=user.id
-                    is_following=is_following %}
-                    {% endif %}
-                </div>
-            </div>
-        </div>
+{% block middle %}
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/profile.css' %}">
+
+<div class="profile-container">
+    <img id="profile-img" src="{{ user.profile.image.url }}">
+    <div class="profile-info">
+        <p class="name">{{ user.first_name }} {{ user.last_name }}</p>
+        <p class="username">@{{ user.username }}</p>
     </div>
 </div>
 
 {% for post in posts %}
-
 {% include "main/post.html" with post=post %}
-
 {% endfor %}
 
-{% endblock content %}
+{% endblock middle %}
+
+
+{% block right %}
+{% endblock %}

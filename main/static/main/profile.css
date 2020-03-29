@@ -1,0 +1,11 @@
+.profile-container {
+    width: 600px;
+    height: 200px;
+    background-color: green;
+    margin: auto;
+    margin-top: 30px;
+}
+
+#profile-img {
+    float: left;
+}

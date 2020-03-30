@@ -36,9 +36,14 @@
 <div class="middle">
     {% block middle %}{% endblock %}
 </div>
+
 <div class="right">
-    {% block right %}{% endblock %}
+    {% if user.is_authenticated %}
+    {% include 'main/audio_player.html' %}
+    {% endif %}
 </div>
+
+
 <div class="footer">
     {% if user.is_authenticated %}
 

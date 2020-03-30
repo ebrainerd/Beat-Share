@@ -1,5 +1,5 @@
 .home-header {
-    height: 65px;
+    height: 100px;
 }
 
 .post-feed {
@@ -7,11 +7,9 @@
     overflow: hidden;
     overflow-y: scroll;
     margin: auto;
-    margin-top: 40px;
 }
 
 .search-bar {
-    margin: auto;
     width: 350px;
     margin: auto;
 }
@@ -19,7 +17,7 @@
 #id_q {
     width: 300px;
     margin: auto;
-    margin-top: 28px;
+    margin-top: 30px;
     height: 30px;
 }
 
@@ -34,4 +32,11 @@
 
 .query {
     margin: 23px 0 -15px 45%;
+    color: white;
+}
+
+.info {
+    margin-top: 20px;
+    margin-left: 36%;
+    color: white;
 }

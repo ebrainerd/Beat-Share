@@ -9,7 +9,7 @@
         <div class="title"><a style="color: #EEEEEE;">{{ post.title }}</a></div>
         <div class="artist"><a style="color: #EEEEEE;">{{ post.author.user.first_name }} {{ post.author.user.last_name }}</a></div>
     </div>
-    <audio class="increment-song-plays audio" data-postid="{{ post.id }}" data-profileid="{{ post.author.id }}" controls>
+    <audio class="increment-song-plays" id="audio" data-postid="{{ post.id }}" data-profileid="{{ post.author.id }}" controls>
         <source src="{{ post.song.url }}" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>

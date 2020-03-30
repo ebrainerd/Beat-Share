@@ -12,6 +12,7 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <link rel="stylesheet" type="text/css" href="{% static 'main/base.css' %}">
+    <script type="text/javascript" src="{{ STATIC_URL }} /static/js/audio_player.js"></script>
 
     <title>Beat Share</title>
 
@@ -25,14 +26,31 @@
 <body>
 
 <div class="left">
-    <h1 id="logo">Beat Share</h1>
-    {% block left %}{% endblock %}
+    <a id="logo-link" href="{% url 'home' %}">
+        <h1 id="logo">Beat Share</h1>
+    </a>
+    {% if user.is_authenticated %}
+    {% include 'main/sidebar.html' %}
+    {% endif %}
 </div>
 <div class="middle">
     {% block middle %}{% endblock %}
 </div>
 <div class="right">
     {% block right %}{% endblock %}
+</div>
+<div class="footer">
+    {% if user.is_authenticated %}
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'main/player.css' %}">
+
+    <audio id="player" controls>
+        <source id="sourceMp3" src="" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+    {% endif %}
 </div>
 
 <!-- Optional JavaScript -->

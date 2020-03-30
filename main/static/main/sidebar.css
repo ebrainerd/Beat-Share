@@ -14,6 +14,7 @@ div.profile img {
     height: 50px;
     width: 50px;
     float: left;
+    border-radius: 50%;
 }
 
 .username {
@@ -24,8 +25,6 @@ div.profile img {
     margin-bottom: 0;
     margin-left: 20px;
 }
-
-
 
 .explore {
     padding-left: 10px;
@@ -49,7 +48,7 @@ div.profile img {
     margin: 50px 0 50px 0;
 }
 
-.explore li a{
+.explore li a {
     text-decoration: none;
 }
 

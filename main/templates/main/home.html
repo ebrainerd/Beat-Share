@@ -1,45 +1,9 @@
 {% extends "main/base.html" %}
 
-{% block left  %}
-{% include 'main/sidebar.html' %}
-{% endblock left %}
-
-
 {% block middle  %}
-
 {% if not user.is_authenticated %}
 {% include login.html %}
 {% else %}
-
-{% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'main/home.css' %}">
-
-<div class="home-header">
-
-    <a href="{% url 'home' %}"><h3 class="logo-home">Home</h3></a>
-    <div class="search-bar">
-        <form method="get">
-            <input type="text" class="form-control" name="q" id="id_q" placeholder="Search...">
-        </form>
-    </div>
-
-    {% if type == "search" %}
-    <h5 class="query">"{{ query }}"</h5>
-    {% endif %}
-
-</div>
-
-<div class="post-feed">
-    {% for post in posts %}
-    {% include 'main/post.html' with post=post %}
-    {% endfor %}
-</div>
-
+{% include 'main/home-feed.html' %}
 {% endif %}
-
 {% endblock middle %}
-
-
-{% block right  %}
-
-{% endblock right %}

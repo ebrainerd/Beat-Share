@@ -1,6 +1,10 @@
 {% extends "main/base.html" %}
 
-{% block content %}
+{% block left  %}
+{% include 'main/sidebar.html' %}
+{% endblock left %}
+
+{% block middle %}
 
 <article class="media content-section">
     <img class="rounded-circle article-img" src="{{ post.author.image.url }}">
@@ -60,4 +64,4 @@
     {% endif %}
 </div>
 
-{% endblock content %}
+{% endblock middle %}

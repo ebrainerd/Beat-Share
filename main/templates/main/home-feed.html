@@ -1,0 +1,41 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/home.css' %}">
+
+<div class="home-header">
+
+    <a href="{% url 'home' %}"><h3 class="logo-home">Home</h3></a>
+    <div class="search-bar">
+        <form method="get">
+            <input type="text" class="form-control" name="q" id="id_q" placeholder="Search...">
+        </form>
+    </div>
+
+    {% if type == "search" %}
+    <h5 class="query">"{{ query }}"</h5>
+    {% endif %}
+
+</div>
+
+<div class="post-feed">
+    {% for post in posts %}
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'main/post.css' %}">
+
+    <div class="post-container">
+        <img id="artwork" src="{{ STATIC_URL }} static/main/css_images/artwork-default.png">
+        <div class="song-info">
+            <div class="title"><a style="color: #EEEEEE;" href="{% url 'post-detail' post.id %}" >{{ post.title }}</a></div>
+            <div class="artist"><a style="color: #EEEEEE;" href="{% url 'profile' user.id %}">
+                {{ post.author.user.first_name }} {{ post.author.user.last_name }}
+            </a></div>
+        </div>
+
+        <img class="play-button"
+             src="{{ STATIC_URL }} static/main/css_images/play-button.png"
+             onclick='loadSong( "{{ post.song.url }}" )'>
+
+    </div>
+
+    {% endfor %}
+</div>

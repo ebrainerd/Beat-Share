@@ -6,11 +6,8 @@ html {
 
 body {
   margin: 0;
-  /* This is used to reset any browser-default margins */
   height: 100vh;
-  /* This is needed to overcome a Chrome bug. */
   width: 100vw;
-  /* As above. */
   font-family: 'Montserrat';
 }
 
@@ -39,4 +36,18 @@ body {
   color: #EEEEEE;
   margin-left: 30px;
   margin-top: 20px;
+  text-decoration: none;
+}
+
+.left a {
+    text-decoration: none;
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color: white;
+  text-align: center;
 }

@@ -20,14 +20,14 @@ body {
 
 .middle {
   height: 100vh;
-  width: 50%;
+  width: 45%;
   background-image: linear-gradient(to right, LightSlateGray , LightSlateGray);
   float: left;
 }
 
 .right {
   height: 100vh;
-  width: 25%;
+  width: 30%;
   background-image: linear-gradient(to right, LightSlateGray , DarkSlateGray);
   float: left;
 }

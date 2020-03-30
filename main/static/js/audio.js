@@ -23,7 +23,7 @@ function initAudio(element){
     $('#audio-player .artist').text(artist);
 
 	//Insert Cover Image
-	$('img.cover').attr('src','images/covers/' + cover);
+	$('img.cover').attr('src','media/' + cover);
 
 	$('#playlist li').removeClass('active');
     element.addClass('active');

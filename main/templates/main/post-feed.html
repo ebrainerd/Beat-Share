@@ -13,9 +13,14 @@
             </a></div>
         </div>
 
+        <!--<button>play</button>-->
+
         <img class="play-button"
              src="{{ STATIC_URL }} static/main/css_images/play-button.png"
-             onclick='loadSong( "{{ post.song.url }}" )'>
+             data-url="{{ post.song.url }}"
+             data-title="{{ post.title }}"
+             data-user="{{ post.author.user.username }}"
+             onclick='loadSong( "{{ post.song.url }}", "{{ post.title }}", "{{ post.author.user.username }}" )'>
 
     </div>
 

@@ -3,7 +3,7 @@ $(document).ready(function() {
 
         e.preventDefault();
 
-        var post_id= = $(this).attr("data-postid");
+        var post_id = $(this).attr("data-postid");
         var profile_id = $(this).attr("data-profileid");
 
         $.ajax(

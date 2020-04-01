@@ -1,30 +1,38 @@
-{% extends "main/base.html" %}
-{% load crispy_forms_tags %}
+<div id="pjax-container">
 
-{% block left %}
-{% include 'main/sidebar.html' %}
-{% endblock left %}
-
-
-{% block middle %}
-
-{% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'main/profile.css' %}">
-
-<div class="profile-container">
-    <img id="profile-img" src="{{ user.profile.image.url }}">
-    <div class="profile-info">
-        <p class="name">{{ user.first_name }} {{ user.last_name }}</p>
-        <p class="username">@{{ user.username }}</p>
+    <div>
+        <h3>{{ request.user.username }}</h3>
     </div>
+
+    <div class="post-feed">
+
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'main/post.css' %}">
+
+        {% for post in posts %}
+
+        {% if post.author.user == request.user %}
+
+        <div class="post-container">
+            <img id="artwork" src="{{ STATIC_URL }} static/main/css_images/artwork-default.png">
+            <div class="song-info">
+                <div class="title"><a style="color: #EEEEEE;" href="{% url 'post-detail' post.id %}">
+                    {{ post.title }}</a>
+                </div>
+                <div class="artist"><a style="color: #EEEEEE;" href="{% url 'profile' user.id %}">
+                    {{ post.author.user.first_name }} {{ post.author.user.last_name }}
+                </a></div>
+            </div>
+
+            <img class="play-button"
+                 src="{{ STATIC_URL }} static/main/css_images/play-button.png"
+                 onclick='loadSong( "{{ post.song.url }}", "{{ post.title }}", "{{ post.author.user.username }}" )'>
+
+        </div>
+
+        {% endif %}
+
+        {% endfor %}
+    </div>
+
 </div>
-
-{% for post in posts %}
-{% include "main/post.html" with post=post %}
-{% endfor %}
-
-{% endblock middle %}
-
-
-{% block right %}
-{% endblock %}

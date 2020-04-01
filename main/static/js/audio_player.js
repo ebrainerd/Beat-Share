@@ -59,7 +59,7 @@ $('#stop').click(function(){
 	audio.currentTime = 0;
 	$('#pause').hide();
 	$('#play').show();
-	$('#duration').fadeOut(400);
+	$('#duration').html('0.00');
 });
 
 //Volume Control

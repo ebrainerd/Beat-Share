@@ -44,11 +44,12 @@ urlpatterns = [
     path('post/<int:pk>/comment/', main_views.add_comment_to_post, name='add_comment_to_post'),
     path('post/<int:pk>/comment/delete/<int:cpk>', main_views.delete_comment, name='delete-comment'),
     path('profile/<int:pk>/profile-follow/', login_required(ProfileFollowToggle.as_view()), name='follow'),
-    path('subscriptions/', main_views.home, name='subscriptions'),
+    # path('subscriptions/', main_views.home, name='subscriptions'),
     path('increment-song-plays/', ajax.increment_song_plays, name='increment-song-plays'),
     path('increment-song-downloads/', ajax.increment_song_downloads, name='increment-song-downloads'),
     path('increment-profile-plays/', ajax.increment_profile_plays, name='increment-profile-plays'),
-    path('', main_views.home, name='home'),
+    path('home/', main_views.home, name='home'),
+    path('', main_views.base, name='base'),
 ]
 
 if settings.DEBUG:

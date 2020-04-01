@@ -15,9 +15,9 @@
 
     <title>Beat Share</title>
 
-    <!--Problem is having the wrong version of jquery-->
-
     <script type="text/javascript" src="{{ STATIC_URL }} /static/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery.pjax/2.0.1/jquery.pjax.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }} /static/js/ajax.js"></script>
 
 </head>
@@ -25,15 +25,64 @@
 <body>
 
 <div class="left">
-    <a id="logo-link" href="{% url 'home' %}">
-        <h1 id="logo">Beat Share</h1>
-    </a>
+
+    <div class="logo">
+        <a href="{% url 'home' %}">
+            <h1 id="logo">Beat Share</h1>
+        </a>
+    </div>
+
     {% if user.is_authenticated %}
-    {% include 'main/sidebar.html' %}
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'main/sidebar.css' %}">
+
+    <br>
+    <div class="left-container">
+        <div class="profile">
+            <img src="{{ user.profile.image.url }}">
+            <p class="username">{{ user.first_name }} {{ user.last_name }}</p>
+        </div>
+
+        <br>
+
+        <div class="explore">
+            <h3 class="explore-header">Explore</h3>
+            <ul class="explore-list">
+                <li>
+                    <div class="home-button">
+                        <a href="{% url 'home' %}">Home Feed</a>
+                    </div>
+                </li>
+                <li>Subscriptions</li>
+                <li>
+                    <div class="profile-button">
+                        <a href="{% url 'profile' user.id %}">Profile</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="upload-button">
+                        <a href="{% url 'post-create' %}">Upload</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="list-item">
+                        <a href="{% url 'logout' %}">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
     {% endif %}
 </div>
+
+
 <div class="middle">
-    {% block middle %}{% endblock %}
+    {% if user.is_authenticated %}
+    <div id="middle-container"></div>
+    {% else %}
+    <a href="{% url 'login' %}">Login to see posts.</a>
+    {% endif %}
 </div>
 
 
@@ -42,7 +91,6 @@
     {% if user.is_authenticated %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'main/audio_player.css' %}">
-    <script type="text/javascript" src="{{ STATIC_URL }} /static/js/audio_player.js"></script>
 
     <div id="audio-container">
         <div id="audio-image">
@@ -75,25 +123,29 @@
 </div>
 
 
-<!--<div class="footer">-->
-<!--{% if user.is_authenticated %}-->
+<script>
 
-<!--{% load static %}-->
-<!--<link rel="stylesheet" type="text/css" href="{% static 'main/player.css' %}">-->
+    $(document).ready( function() {
 
-<!--<audio id="player" controls>-->
-<!--<source id="sourceMp3" src="" type="audio/mp3">-->
-<!--Your browser does not support the audio element.-->
-<!--</audio>-->
+        $('#middle-container').load( 'home' );
 
-<!--{% endif %}-->
-<!--</div>-->
+        $('.explore-list a').click(function(e) {
+            e.preventDefault();
+            $('#middle-container').load(e.target.href);
+        })
+
+        $('.logo a').click(function(e) {
+            e.preventDefault();
+            $('#middle-container').load(e.target.href);
+        })
+
+    });
+
+
+</script>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<!--<script src="https://code.jquery.com/jquery-3.2.1.min.js"-->
-<!--integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"-->
-<!--crossorigin="anonymous"></script>-->
 
 <script type="text/javascript" src="{{ STATIC_URL }} /static/js/audio_player.js"></script>
 

@@ -52,6 +52,7 @@ class Post(models.Model):
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(Profile, on_delete=models.CASCADE)
     song = models.FileField(blank=False, default=None, upload_to='audio')
+    album_artwork = models.ImageField(default='artwork-default.png', upload_to='album_covers', blank=True)
     num_plays = models.IntegerField(blank=False, default=0)
     num_downloads = models.IntegerField(blank=False, default=0)
 

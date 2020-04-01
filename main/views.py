@@ -11,26 +11,18 @@ from django.db.models import Q
 from main.utils import *
 
 
+def base(request):
+    return render(request, 'main/base.html')
+
+
 def home(request):
-    query = ""
-    if request.GET:
-        query = request.GET['q']
 
     posts = Post.objects.all().order_by('-date_posted')
-
-    if query == "":
-        if len(posts) is 0:
-            messages.info(request, f'No posts to display')
-        display_type = "reg"
-
-    else:
-        posts = get_query_set(posts, query)
-        display_type = "search"
+    display_type = "reg"
 
     context = {
         'posts': posts,
-        'type': display_type,
-        'query': query
+        'type': display_type
     }
 
     return render(request, 'main/home.html', context)
@@ -105,7 +97,7 @@ class PostListViewHome(ListView):
 
 class PostCreateView(CreateView):
     model = Post
-    fields = ['title', 'description', 'song']
+    fields = ['title', 'description', 'song', 'album_artwork']
     success_url = '/'
 
     def form_valid(self, form):

@@ -1,8 +1,11 @@
+{% extends "main/base.html" %}
 {% load crispy_forms_tags %}
+
+
+{% block login  %}
 
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'main/login.css' %}">
-
 
 <div class="login-container">
     <div class="login">
@@ -23,3 +26,5 @@
         </div>
     </div>
 </div>
+
+{% endblock login %}

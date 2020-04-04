@@ -42,3 +42,17 @@ body {
 .left a {
     text-decoration: none;
 }
+
+.login-container {
+    width: 100%;
+    text-align: center;
+}
+
+.login-container a {
+    margin: 0 auto;
+    text-align: center;
+    display:inline-block;
+    text-decoration: none !important;
+    color: white;
+    margin-top: 45%;
+}

@@ -10,6 +10,11 @@
     margin: auto;
 }
 
+/* Hide scrollbar for Chrome, Safari and Opera */
+.post-feed::-webkit-scrollbar {
+    display: none;
+}
+
 .search-bar {
     width: 350px;
     margin: auto;

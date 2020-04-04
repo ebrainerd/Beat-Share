@@ -27,13 +27,12 @@
 <div class="left">
 
     <div class="logo">
-        <a href="{% url 'home' %}">
+        <a href="{% url 'base' %}">
             <h1 id="logo">Beat Share</h1>
         </a>
     </div>
 
     {% if user.is_authenticated %}
-
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'main/sidebar.css' %}">
 
@@ -50,29 +49,47 @@
             <h3 class="explore-header">Explore</h3>
             <ul class="explore-list">
                 <li>
-                    <div class="home-button">
-                        <a href="{% url 'home' %}">Home Feed</a>
+                    <div class="middle-refresh">
+                        <a style="color: white;" href="{% url 'home' %}">Home Feed</a>
                     </div>
                 </li>
                 <li>Subscriptions</li>
                 <li>
-                    <div class="profile-button">
-                        <a href="{% url 'profile' user.id %}">Profile</a>
+                    <div class="middle-refresh">
+                        <a style="color: white;" href="{% url 'profile' user.id %}">Profile</a>
                     </div>
                 </li>
                 <li>
-                    <div class="upload-button">
-                        <a href="{% url 'post-create' %}">Upload</a>
+                    <div class="middle-refresh">
+                        <a style="color: white;" href="{% url 'post-create' %}">Upload</a>
                     </div>
                 </li>
                 <li>
                     <div class="list-item">
-                        <a href="{% url 'logout' %}">Logout</a>
+                        <a style="color: white;" href="{% url 'logout' %}">Logout</a>
                     </div>
                 </li>
             </ul>
         </div>
     </div>
+
+    {% else %}
+
+    <div class="explore">
+        <ul class="explore-list-x">
+            <li>
+                <div class="login-button">
+                    <a href="{% url 'login' %}">Login</a>
+                </div>
+            </li>
+            <li>
+                <div class="register-button">
+                    <a href="{% url 'register' %}">Register</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+
     {% endif %}
 </div>
 
@@ -80,9 +97,10 @@
 <div class="middle">
     {% if user.is_authenticated %}
     <div id="middle-container"></div>
-    {% else %}
-    <a href="{% url 'login' %}">Login to see posts.</a>
     {% endif %}
+
+    {% block login %}{% endblock login %}
+
 </div>
 
 
@@ -129,15 +147,10 @@
 
         $('#middle-container').load( 'home' );
 
-        $('.explore-list a').click(function(e) {
+        $('.middle-refresh a').click(function(e) {
             e.preventDefault();
             $('#middle-container').load(e.target.href);
-        })
-
-        $('.logo a').click(function(e) {
-            e.preventDefault();
-            $('#middle-container').load(e.target.href);
-        })
+        });
 
     });
 

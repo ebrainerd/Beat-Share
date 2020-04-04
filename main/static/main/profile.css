@@ -1,3 +1,35 @@
+.profile-header {
+    width: 600px;
+    height: 150px;
+    display: table;
+    height: 150px;
+    width: 600px;
+    margin: auto;
+}
+
+.profile-header-info {
+    width: 400px;
+    margin: auto;
+    margin-left: 10px;
+    margin-top: 30px;
+    color: white;
+    float: left;
+}
+
+.follow-update-button {
+    float: right;
+    margin-right: 10px;
+    margin-top: 30px;
+}
+
+.profile-post-feed {
+    height: 77vh;
+    overflow: hidden;
+    overflow-y: scroll;
+    overflow-x: scroll;
+    margin: auto;
+}
+
 .profile-container {
     width: 600px;
     height: 200px;
@@ -7,7 +39,10 @@
 }
 
 #profile-img {
+    height: 70px;
+    width: 70px;
     float: left;
+    border-radius: 50%;
 }
 
 .username-profile {

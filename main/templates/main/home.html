@@ -6,8 +6,12 @@
         <link rel="stylesheet" type="text/css" href="{% static 'main/home.css' %}">
 
         <div class="search-bar">
-            <form method="get">
+            <form class="search-bar-form" method="GET">
+                {% if query == "" %}
                 <input type="text" class="form-control" name="q" id="id_q" placeholder="Search Home...">
+                {% else %}
+                <input type="text" class="form-control" name="q" id="id_q" placeholder="{{ query }}">
+                {% endif %}
             </form>
         </div>
 
@@ -40,5 +44,28 @@
 
         {% endfor %}
     </div>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var frm = $('.search-bar-form');
+
+            frm.submit(function () {
+                $.ajax({
+                    type: frm.attr('method'),
+                    url: "{% url 'home' %}",
+                    data: frm.serialize(),
+                    success: function (data) {
+                        $("#middle-container").html(data);
+                    },
+                    error: function(data) {
+                        $("#middle-container").html("Something went wrong!");
+                    }
+                });
+                return false;
+            });
+        });
+
+    </script>
 
 </div>

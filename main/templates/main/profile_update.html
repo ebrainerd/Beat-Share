@@ -22,16 +22,16 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-            var frm = $('.profile-update-form');
-            var frm_obj = $('form')[0];
+            var frm = $('.profile-update-form'); // The html element
+            var frm_obj = $('form')[0]; // The form object with all the data
 
             frm.submit(function () {
                 $.ajax({
                     type: frm.attr('method'),
                     url: "{% url 'update-profile' pk=user.id %}",
                     data: new FormData(frm_obj),
-                    contentType: false,
-                    processData: false,
+                    contentType: false, // Allows for multi-type data ie files
+                    processData: false, // Doesn't append data to URL and allows for data to be sent without processed
                     success: function (data) {
                         $("#middle-container").html(data);
                     },

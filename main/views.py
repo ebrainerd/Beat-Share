@@ -16,13 +16,16 @@ def base(request):
 
 
 def home(request):
-
     posts = Post.objects.all().order_by('-date_posted')
-    display_type = "reg"
+
+    query = ""
+    if request.GET:
+        query = request.GET['q']
+        posts = get_query_set(posts, query)
 
     context = {
         'posts': posts,
-        'type': display_type
+        'query': query
     }
 
     return render(request, 'main/home.html', context)

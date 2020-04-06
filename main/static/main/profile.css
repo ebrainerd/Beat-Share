@@ -23,11 +23,15 @@
 }
 
 .profile-post-feed {
-    height: 77vh;
+    height: 73vh;
     overflow: hidden;
     overflow-y: scroll;
     overflow-x: scroll;
     margin: auto;
+}
+
+.profile-post-feed::-webkit-scrollbar {
+  display: none;
 }
 
 .profile-container {

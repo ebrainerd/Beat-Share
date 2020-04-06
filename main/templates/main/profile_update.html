@@ -1,6 +1,8 @@
 <div id="pjax-container">
 
-{% load crispy_forms_tags %}
+    {% load crispy_forms_tags %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'main/profile_update.css' %}">
 
     <div class="content-section">
       <div class="media">
@@ -8,7 +10,7 @@
           <h2 class="account-heading">{{ user.username }} Profile</h2>
         </div>
       </div>
-      <form method="POST" enctype="multipart/form-data">
+      <form class="profile-update-form" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
           <fieldset class="form-group">
               <legend class="border-bottom mb-4">Profile Info</legend>
@@ -20,5 +22,26 @@
           </div>
       </form>
     </div>
+
+    <script type="text/javascript">
+
+        var frm = $('.profile-update-form');
+
+        frm.submit(function () {
+            $.ajax({
+                type: frm.attr('method'),
+                url: "{% url 'update-profile' pk=user.id %}",
+                data: frm.serialize(),
+                success: function (data) {
+                    $("#middle-container").html(data);
+                },
+                error: function(data) {
+                    $("#middle-container").html("Something went wrong!");
+                }
+            });
+            return false;
+        });
+
+    </script>
 
 </div>

@@ -6,13 +6,7 @@
 
     <div class="update-profile-outer">
 
-      <!--<div class="media">-->
-        <!--<div class="media-body">-->
-          <!--<h2 class="account-heading">{{ user.username }}</h2>-->
-        <!--</div>-->
-      <!--</div>-->
-
-      <form class="profile-update-form" method="POST" enctype="multipart/form-data">
+      <form enctype="multipart/form-data" method="POST" class="profile-update-form">
           {% csrf_token %}
           <fieldset class="form-group">
               <legend class="border-bottom mb-4">Update Profile</legend>
@@ -20,28 +14,33 @@
               {{ p_form|crispy }}
           </fieldset>
           <div class="form-group">
-              <button class="btn btn-outline-info submit-button" type="submit">Update</button>
+              <button class="btn btn-outline-info" type="submit" id="submit-button">Update</button>
           </div>
       </form>
     </div>
 
     <script type="text/javascript">
 
-        var frm = $('.profile-update-form');
+        $(document).ready(function () {
+            var frm = $('.profile-update-form');
+            var frm_obj = $('form')[0];
 
-        frm.submit(function () {
-            $.ajax({
-                type: frm.attr('method'),
-                url: "{% url 'update-profile' pk=user.id %}",
-                data: frm.serialize(),
-                success: function (data) {
-                    $("#middle-container").html(data);
-                },
-                error: function(data) {
-                    $("#middle-container").html("Something went wrong!");
-                }
+            frm.submit(function () {
+                $.ajax({
+                    type: frm.attr('method'),
+                    url: "{% url 'update-profile' pk=user.id %}",
+                    data: new FormData(frm_obj),
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        $("#middle-container").html(data);
+                    },
+                    error: function(data) {
+                        $("#middle-container").html("Something went wrong!");
+                    }
+                });
+                return false;
             });
-            return false;
         });
 
     </script>

@@ -16,6 +16,10 @@
     float: left;
 }
 
+.profile-header-info img {
+    margin-right: 10px;
+}
+
 .follow-update-button {
     float: right;
     margin-right: 10px;
@@ -23,7 +27,7 @@
 }
 
 .profile-post-feed {
-    height: 73vh;
+    height: 70vh;
     overflow: hidden;
     overflow-y: scroll;
     overflow-x: scroll;

@@ -23,11 +23,12 @@
 }
 
 .profile-post-feed {
-    height: 76vh;
+    height: 73vh;
     overflow: hidden;
     overflow-y: scroll;
     overflow-x: scroll;
     margin: auto;
+    margin-top: 20px;
 }
 
 .profile-post-feed::-webkit-scrollbar {
@@ -51,4 +52,15 @@
 
 .username-profile {
     margin-left: 100px;
+}
+
+.profile-bio {
+    float: left;
+    color: white;
+    font-size: 20px;
+    margin-top: 10px;
+    border-bottom-width: 1px;
+    border-bottom-color: White;
+    border-bottom-style: solid;
+    width: 600px;
 }

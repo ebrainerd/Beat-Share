@@ -184,7 +184,7 @@ def update_profile(request, pk):
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
-            messages.success(request, f'Your account has been updated!')
+            messages.success(request, f'Your account has been updated! Refresh page to see updates.')
             return redirect('profile', pk)
 
     else:

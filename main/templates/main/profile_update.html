@@ -4,21 +4,21 @@
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'main/profile_update.css' %}">
 
-    <div class="content-section">
+    <div class="update-profile-outer">
       <div class="media">
         <div class="media-body">
-          <h2 class="account-heading">{{ user.username }} Profile</h2>
+          <h2 class="account-heading">{{ user.username }}</h2>
         </div>
       </div>
       <form class="profile-update-form" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
           <fieldset class="form-group">
-              <legend class="border-bottom mb-4">Profile Info</legend>
+              <legend class="border-bottom mb-4">Update Profile</legend>
               {{ u_form|crispy }}
               {{ p_form|crispy }}
           </fieldset>
           <div class="form-group">
-              <button class="btn btn-outline-info" type="submit">Update</button>
+              <button class="btn btn-outline-info submit-button" type="submit">Update</button>
           </div>
       </form>
     </div>

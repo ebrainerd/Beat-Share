@@ -1,0 +1,25 @@
+ .update-profile-outer {
+    margin: auto;
+    margin-top: 25px;
+    color: white;
+    height: 85vh;
+    overflow: hidden;
+    overflow-y: scroll;
+    overflow-x: scroll;
+ }
+
+.update-profile-outer a {
+    color: white;
+ }
+
+.form-text {
+    color: white;
+}
+
+.update-profile-outer::-webkit-scrollbar {
+    display: none;
+}
+
+.submit-button {
+    background-color: white;
+ }

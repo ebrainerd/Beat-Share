@@ -1,8 +1,13 @@
 {% extends "main/base.html" %}
 {% load crispy_forms_tags %}
 
-{% block content  %}
-	<div class="content-section">
+{% block login  %}
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/register.css' %}">
+
+<div class="register-container">
+    <div class="register">
         <form method="POST">
             {% csrf_token %}
             <fieldset class="form-group">
@@ -19,4 +24,6 @@
             </small>
         </div>
     </div>
-{% endblock content %}
+</div>
+
+{% endblock login %}

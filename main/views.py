@@ -16,7 +16,7 @@ def base(request):
 
 
 def home(request):
-    posts = Post.objects.all().order_by('-date_posted')
+    posts = Post.objects.all().order_by('date_posted')
 
     query = ""
     if request.GET:

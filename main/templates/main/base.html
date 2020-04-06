@@ -33,12 +33,14 @@
         </a>
     </div>
 
-    {% if user.is_authenticated %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'main/sidebar.css' %}">
 
     <br>
     <div class="left-container">
+
+        {% if user.is_authenticated %}
+
         <div class="profile">
             <img src="{{ user.profile.image.url }}">
             <p class="username">{{ user.first_name }} {{ user.last_name }}</p>
@@ -72,26 +74,43 @@
                 </li>
             </ul>
         </div>
+
+        {% else %}
+
+        <div class="explore">
+            <ul class="explore-list">
+                <li>
+                    <div class="login-button">
+                        <a style="color: white;" href="{% url 'login' %}">Login</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="register-button">
+                        <a style="color: white;" href="{% url 'register' %}">Register</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        {% endif %}
+
     </div>
 
-    {% else %}
+    <!--<div class="explore">-->
+        <!--<ul class="explore-list-x">-->
+            <!--<li>-->
+                <!--<div class="login-button">-->
+                    <!--<a href="{% url 'login' %}">Login</a>-->
+                <!--</div>-->
+            <!--</li>-->
+            <!--<li>-->
+                <!--<div class="register-button">-->
+                    <!--<a href="{% url 'register' %}">Register</a>-->
+                <!--</div>-->
+            <!--</li>-->
+        <!--</ul>-->
+    <!--</div>-->
 
-    <div class="explore">
-        <ul class="explore-list-x">
-            <li>
-                <div class="login-button">
-                    <a href="{% url 'login' %}">Login</a>
-                </div>
-            </li>
-            <li>
-                <div class="register-button">
-                    <a href="{% url 'register' %}">Register</a>
-                </div>
-            </li>
-        </ul>
-    </div>
-
-    {% endif %}
 </div>
 
 
@@ -155,6 +174,7 @@
         });
 
     });
+
 
 
 </script>

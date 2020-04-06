@@ -15,7 +15,11 @@
             </form>
         </div>
 
+        {% if query == "" %}
         <div class="info"><h5>Displaying all songs</h5></div>
+        {% else %}
+        <div class="info"><h5>Search Results</h5></div>
+        {% endif %}
 
     </div>
 

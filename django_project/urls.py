@@ -26,11 +26,13 @@ from main.views import (
     PostDetailView,
     PostCreateView,
     PostDeleteView,
-    ProfileFollowToggle,
     PostUpdateView
 )
 
 urlpatterns = [
+    path('', main_views.base, name='base'),
+    path('home/', main_views.home, name='home'),
+    path('subscriptions/', main_views.subscriptions, name='subscriptions'),
     path('admin/', admin.site.urls),
     path('register/', main_views.register, name='register'),
     path('login/', auth_views.LoginView.as_view(template_name='main/login.html'), name='login'),
@@ -43,13 +45,11 @@ urlpatterns = [
     path('post/<int:pk>/update/', login_required(PostUpdateView.as_view()), name='post-update'),
     path('post/<int:pk>/comment/', main_views.add_comment_to_post, name='add_comment_to_post'),
     path('post/<int:pk>/comment/delete/<int:cpk>', main_views.delete_comment, name='delete-comment'),
-    path('profile/<int:pk>/profile-follow/', login_required(ProfileFollowToggle.as_view()), name='follow'),
-    # path('subscriptions/', main_views.home, name='subscriptions'),
+    # path('profile/<int:pk>/profile-follow/', login_required(ProfileFollowToggle.as_view()), name='follow'),
+    path('profile/<int:pk>/profile-follow/', main_views.follow_toggle, name='follow'),
     path('increment-song-plays/', ajax.increment_song_plays, name='increment-song-plays'),
     path('increment-song-downloads/', ajax.increment_song_downloads, name='increment-song-downloads'),
     path('increment-profile-plays/', ajax.increment_profile_plays, name='increment-profile-plays'),
-    path('home/', main_views.home, name='home'),
-    path('', main_views.base, name='base'),
 ]
 
 if settings.DEBUG:

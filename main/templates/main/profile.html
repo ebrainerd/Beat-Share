@@ -15,20 +15,19 @@
 
 
         <div class="profile-header-info">
-            <img id="profile-img" src="{{ request.user.profile.image.url }}">
-            <h4>{{ request.user.first_name }} {{ request.user.last_name }}</h4>
-            <h5>@{{ request.user.username }}</h5>
+            <img id="profile-img" src="{{ user.profile.image.url }}">
+            <h4>{{ user.first_name }} {{ user.last_name }}</h4>
+            <h5>@{{ user.username }}</h5>
         </div>
         <div class="follow-update-button">
             {% if request.user.id == user.id %}
             <a class='btn btn-secondary btn-sm mt-1 mb-1 update-profile'
-               href="{% url 'update-profile' pk=user.id %}">Edit Profile</a>
+                href="{% url 'update-profile' pk=user.id %}">Edit Profile</a>
             {% else %}
-            {% include 'main/follow_form.html' with username=user.username user_id=user.id is_following=is_following
-            %}
+            {% include 'main/follow_form.html' with username=user.username user_id=user.id is_following=is_following %}
             {% endif %}
         </div>
-        <p class="profile-bio">{{ request.user.profile.bio }}</p>
+        <p class="profile-bio">{{ user.profile.bio }}</p>
     </div>
 
     <div class="post-feed">
@@ -39,21 +38,20 @@
         <div class="profile-post-feed">
             {% for post in posts %}
 
-            {% if post.author.user == request.user %}
+            {% if post.author.user == user %}
             <div class="post-container">
                 <img id="artwork" src="{{ STATIC_URL }} static/main/css_images/artwork-default.png">
                 <div class="song-info">
-                    <div class="title"><a style="color: #EEEEEE;" href="{% url 'post-detail' post.id %}">
-                        {{ post.title }}</a>
+                    <div class="post-title"><a style="color: #EEEEEE;" href="{% url 'post-detail' post.id %}">
+                            {{ post.title }}</a>
                     </div>
-                    <div class="artist"><a style="color: #EEEEEE;" href="{% url 'profile' user.id %}">
-                        {{ post.author.user.first_name }} {{ post.author.user.last_name }}
-                    </a></div>
+                    <div class="post-author"><a style="color: #EEEEEE;" href="{% url 'profile' post.author.user.id %}">
+                            {{ post.author.user.first_name }} {{ post.author.user.last_name }}
+                        </a></div>
                 </div>
 
-                <img class="play-button"
-                     src="{{ STATIC_URL }} static/main/css_images/play-button.png"
-                     onclick='loadSong( "{{ post.song.url }}", "{{ post.title }}", "{{ post.author.user.username }}" )'>
+                <img class="play-button" src="{{ STATIC_URL }} static/main/css_images/play-button.png"
+                    onclick='loadSong( "{{ post.song.url }}", "{{ post.title }}", "{{ post.author.user.username }}" )'>
 
             </div>
             {% endif %}
@@ -64,16 +62,14 @@
 
     <script>
 
-        $(document).ready( function() {
+        $(document).ready(function () {
 
-            $('.update-profile').click(function(e) {
+            $('a').click(function (e) {
                 e.preventDefault();
                 $('#middle-container').load(e.target.href);
             });
 
         });
-
-
 
     </script>
 

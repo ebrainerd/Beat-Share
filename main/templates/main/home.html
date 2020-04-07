@@ -33,9 +33,9 @@
         <div class="post-container">
             <img id="artwork" src="{{ STATIC_URL }} static/main/css_images/artwork-default.png">
             <div class="song-info">
-                <div class="title"><a style="color: #EEEEEE;" href="{% url 'post-detail' post.id %}">
+                <div class="post-title"><a style="color: #EEEEEE;" href="{% url 'post-detail' post.id %}">
                     {{ post.title }}</a></div>
-                <div class="artist"><a style="color: #EEEEEE;" href="{% url 'profile' user.id %}">
+                <div class="post-author"><a style="color: #EEEEEE;" href="{% url 'profile' post.author.user.id %}">
                     {{ post.author.user.first_name }} {{ post.author.user.last_name }}
                 </a></div>
             </div>
@@ -67,6 +67,11 @@
                     }
                 });
                 return false;
+            });
+
+            $('.post-author').click(function(e) {
+                e.preventDefault();
+                $('#middle-container').load(e.target.href);
             });
         });
 

@@ -1,7 +1,8 @@
 {% if request.user.is_authenticated %}
-<form class='form' method='POST' action='{% url "follow" user_id %}'> {% csrf_token %}
-    <input type='hidden' name='username' value='{{ username }}'/>
-    <button class='btn {% if is_following %}btn-danger{% else %}btn-primary{% endif %}'>
+<form method='POST'>
+    {% csrf_token %}
+    <!-- <input type='hidden' name='username' value='{{ username }}' /> -->
+    <button class='btn {% if is_following %}btn-danger{% else %}btn-primary{% endif %}' type='submit'>
         {% if is_following %}
         Unsubscribe
         {% else %}
@@ -9,4 +10,28 @@
         {% endif %}
     </button>
 </form>
+
+<script>
+
+    $(document).ready(function () {
+
+        var frm = $('form'); // The html element
+
+        frm.submit(function () {
+            $.ajax({
+                type: frm.attr('method'),
+                url: "{% url 'follow' user_id %}",
+                data: frm.serialize(),
+                success: function (data) {
+                    $("#middle-container").html(data);
+                },
+                error: function (data) {
+                    $("#middle-container").html("Something went wrong!");
+                }
+            });
+            return false;
+        });
+    });
+
+</script>
 {% endif %}

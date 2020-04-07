@@ -8,7 +8,7 @@ from django.views.generic import View, DetailView, ListView, UpdateView, CreateV
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentForm
 from django.http import Http404
 from django.db.models import Q
-from main.utils import *
+from main.utils import get_top_stats
 
 
 def base(request):
@@ -16,6 +16,22 @@ def base(request):
 
 
 def home(request):
+    posts = Post.objects.all().order_by('date_posted')
+
+    query = ""
+    if request.GET:
+        query = request.GET['q']
+        posts = get_query_set(posts, query)
+
+    context = {
+        'posts': posts,
+        'query': query
+    }
+
+    return render(request, 'main/home.html', context)
+
+
+def subscriptions(request):
     posts = Post.objects.all().order_by('date_posted')
 
     query = ""
@@ -226,9 +242,11 @@ def delete_comment(request, pk, cpk):
         comment.delete()
     return redirect('post-detail', pk=pk)
 
-
-class ProfileFollowToggle(LoginRequiredMixin, View):
-    def post(self, request, *args, **kwargs):
-        username_to_toggle = request.POST.get("username")
-        profile_, is_following = Profile.objects.toggle_follow(request.user, username_to_toggle)
+@login_required
+def follow_toggle(request, pk):
+    profile_to_toggle = get_object_or_404(Profile, id=pk)
+    if request.method == "POST":
+        profile_ = Profile.objects.toggle_follow(request.user, profile_to_toggle.user.username)
         return redirect('profile', profile_.user.id)
+    else:
+        return redirect('profile', profile_to_toggle.user.id)

@@ -7,23 +7,24 @@ from PIL import Image
 
 
 class ProfileManager(models.Manager):
-    def toggle_follow(self, request_user, username_to_toggle):
-        profile_ = Profile.objects.get(user__username__iexact=username_to_toggle)
-        user = request_user
-        # is_following = False
-        if user in profile_.followers.all():
-            profile_.followers.remove(user)
-        else:
-            profile_.followers.add(user)
-            # is_following = True
-        return profile_
+    pass
+    # def toggle_follow(self, request_profile, toggle_profile):
+    #     if toggle_profile in request_profile.following.all():
+    #         request_profile.following.remove(toggle_profile)
+    #         toggle_profile.followers.remove(request_profile)
+    #     else:
+    #         request_profile.following.add(toggle_profile)
+    #         toggle_profile.followers.add(request_profile)
+    #     request_profile.save()
+    #     toggle_profile.save()
 
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
     bio = models.TextField(max_length=500, blank=True, default="")
-    followers = models.ManyToManyField(User, symmetrical=False, related_name='is_following', blank=True)
+    # followers = models.ManyToManyField('self', symmetrical=False, related_name="my_followers", blank=True)
+    # following = models.ManyToManyField('self', symmetrical=False, blank=True)
     song_plays = models.IntegerField(blank=False, default=0)
     song_downloads = models.IntegerField(blank=False, default=0)
 
@@ -40,6 +41,22 @@ class Profile(models.Model):
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.image.path)
+
+
+class ProfileFollowingManager(models.Manager):
+    pass
+
+
+class ProfileFollowing(models.Model):
+    user_prof = models.ForeignKey(Profile, related_name="following", on_delete=models.CASCADE)
+    following_user_prof = models.ForeignKey(Profile, related_name="followers", on_delete=models.CASCADE)
+    # When user started following
+    created = models.DateTimeField(auto_now_add=True)
+
+    objects = ProfileFollowingManager()
+
+    class Meta:
+        unique_together = ('user_prof', 'following_user_prof',)
 
 
 class PostManager(models.Manager):

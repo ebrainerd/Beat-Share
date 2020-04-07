@@ -7,7 +7,7 @@
 
     <div class="post-form-container">
         <div class="post-form">
-            <form method="POST" enctype="multipart/form-data">
+            <form method="POST" enctype="multipart/form-data" class="upload-form">
                 {% csrf_token %}
                 <fieldset class="form-group">
                     <legend class="border-bottom mb-4">Post to Beat Share</legend>
@@ -21,5 +21,30 @@
         </div>
     </div>
 
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var frm = $('.upload-form'); // The html element
+            var frm_obj = $('.upload-form')[0]; // The form object with all the data
+
+            frm.submit(function () {
+                $.ajax({
+                    type: frm.attr('method'),
+                    url: "{% url 'post-create' %}",
+                    data: new FormData(frm_obj),
+                    contentType: false, // Allows for multi-type data ie files
+                    processData: false, // Doesn't append data to URL and allows for data to be sent without processed
+                    success: function (data) {
+                        $("#middle-container").html(data);
+                    },
+                    error: function(data) {
+                        $("#middle-container").html("Something went wrong!");
+                    }
+                });
+                return false;
+            });
+        });
+
+    </script>
 
 </div>

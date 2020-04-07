@@ -1,19 +1,79 @@
-{% extends "main/base.html" %}
-{% block content %}
+<div id="pjax-container">
 
-{% if type == "reg" %}
-<h2>Subscription Posts</h2>
-{% else %}
-<h4>Search Subscription Results</h4>
-{% endif %}
+    <div class="home-header">
 
-{% if not posts and type == "search" %}
-<h5>No matching results.</h5>
-{% else %}
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'main/home.css' %}">
 
-{% for post in posts %}
-    {% include "main/post.html" with post=post %}
-{% endfor %}
+        <div class="search-bar">
+            <form class="search-bar-form" method="GET">
+                {% if query == "" %}
+                <input type="text" class="form-control" name="q" id="id_q" placeholder="Search Subscriptions...">
+                {% else %}
+                <input type="text" class="form-control" name="q" id="id_q" placeholder="{{ query }}">
+                {% endif %}
+            </form>
+        </div>
 
-{% endif %}
-{% endblock content %}
+        {% if query == "" %}
+        <div class="info"><h5>Subscriptions</h5></div>
+        {% else %}
+        <div class="info"><h5>Search Results</h5></div>
+        {% endif %}
+
+    </div>
+
+    <div class="post-feed">
+
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'main/post.css' %}">
+
+        {% for post in posts %}
+        <div class="post-container">
+            <img id="artwork" src="{{ STATIC_URL }} static/main/css_images/artwork-default.png">
+            <div class="song-info">
+                <div class="post-title"><a style="color: #EEEEEE;" href="{% url 'post-detail' post.id %}">
+                    {{ post.title }}</a></div>
+                <div class="post-author"><a style="color: #EEEEEE;" href="{% url 'profile' post.author.user.id %}">
+                    {{ post.author.user.first_name }} {{ post.author.user.last_name }}
+                </a></div>
+            </div>
+
+            <img class="play-button"
+                 src="{{ STATIC_URL }} static/main/css_images/play-button.png"
+                 onclick='loadSong( "{{ post.song.url }}", "{{ post.title }}", "{{ post.author.user.username }}" )'>
+
+        </div>
+        {% endfor %}
+        
+    </div>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var frm = $('.search-bar-form');
+
+            frm.submit(function () {
+                $.ajax({
+                    type: frm.attr('method'),
+                    url: "{% url 'subscriptions' %}",
+                    data: frm.serialize(),
+                    success: function (data) {
+                        $("#middle-container").html(data);
+                    },
+                    error: function(data) {
+                        $("#middle-container").html("Something went wrong!");
+                    }
+                });
+                return false;
+            });
+
+            $('.post-author').click(function(e) {
+                e.preventDefault();
+                $('#middle-container').load(e.target.href);
+            });
+        });
+
+    </script>
+
+</div>

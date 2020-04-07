@@ -1,8 +1,10 @@
 {% if request.user.is_authenticated %}
-<form method='POST'>
+<form method='POST' class="follow-form">
     {% csrf_token %}
-    <!-- <input type='hidden' name='username' value='{{ username }}' /> -->
-    <button class='btn {% if is_following %}btn-danger{% else %}btn-primary{% endif %}' type='submit'>
+    <input type='hidden' name='username' value='{{ username }}' />
+    <button class='btn {% if is_following %} btn-danger {% else %} btn-primary {% endif %}' 
+            type='submit'
+            href="{% url 'profile' user_id %}">
         {% if is_following %}
         Unsubscribe
         {% else %}
@@ -15,18 +17,21 @@
 
     $(document).ready(function () {
 
-        var frm = $('form'); // The html element
+        var frm = $('.follow-form');
 
-        frm.submit(function () {
+        frm.submit(function (e) {
             $.ajax({
                 type: frm.attr('method'),
                 url: "{% url 'follow' user_id %}",
                 data: frm.serialize(),
                 success: function (data) {
                     $("#middle-container").html(data);
+                    // $('#middle-container').load(e.target.href);
                 },
                 error: function (data) {
-                    $("#middle-container").html("Something went wrong!");
+                    console.log(data);
+                    $("#middle-container").html("Something went wrong in follow form!");
+                    // $('#middle-container').load(e.target.href);
                 }
             });
             return false;

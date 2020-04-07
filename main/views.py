@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post, Profile, Comment
+from .models import Post, Profile, Comment, ProfileFollowing
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -16,7 +16,7 @@ def base(request):
 
 
 def home(request):
-    posts = Post.objects.all().order_by('date_posted')
+    posts = Post.objects.all().order_by('-date_posted')
 
     query = ""
     if request.GET:
@@ -32,19 +32,21 @@ def home(request):
 
 
 def subscriptions(request):
-    posts = Post.objects.all().order_by('date_posted')
+    following = ProfileFollowing.objects.values_list('following_user_prof', flat=True).filter(user_prof=request.user.profile)
+    posts = Post.objects.filter(author__in=set(following))
 
     query = ""
     if request.GET:
         query = request.GET['q']
         posts = get_query_set(posts, query)
 
+
     context = {
         'posts': posts,
         'query': query
     }
 
-    return render(request, 'main/home.html', context)
+    return render(request, 'main/subscriptions.html', context)
 
 
 def explore(request):
@@ -120,6 +122,7 @@ class PostCreateView(CreateView):
     success_url = '/'
 
     def form_valid(self, form):
+        print("Form valid")
         form.instance.author = self.request.user.profile
         return super().form_valid(form)
 
@@ -174,11 +177,14 @@ class ProfileDetailView(DetailView):
         else:
             user_to_view = get_object_or_404(User, id=pk, is_active=True)
 
-        posts = Post.objects.filter(author=user_to_view.profile).order_by('-date_posted')
+        posts = Post.objects.filter(
+            author=user_to_view.profile
+        ).order_by('-date_posted')
 
         is_following = False
-        if self.request.user.is_authenticated and user_to_view.profile in self.request.user.is_following.all():
-            is_following = True
+        if self.request.user.is_authenticated and user_to_view != request.user:
+            if ProfileFollowing.objects.filter(user_prof=request.user.profile, following_user_prof=user_to_view.profile).exists():
+                is_following = True
 
         context = {
             'user': user_to_view,
@@ -203,7 +209,8 @@ def update_profile(request, pk):
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
-            messages.success(request, f'Your account has been updated! Refresh page to see updates.')
+            messages.success(
+                request, f'Your account has been updated! Refresh page to see updates.')
             return redirect('profile', pk)
 
     else:
@@ -242,11 +249,15 @@ def delete_comment(request, pk, cpk):
         comment.delete()
     return redirect('post-detail', pk=pk)
 
+
 @login_required
 def follow_toggle(request, pk):
     profile_to_toggle = get_object_or_404(Profile, id=pk)
     if request.method == "POST":
-        profile_ = Profile.objects.toggle_follow(request.user, profile_to_toggle.user.username)
-        return redirect('profile', profile_.user.id)
-    else:
-        return redirect('profile', profile_to_toggle.user.id)
+
+        if ProfileFollowing.objects.filter(user_prof=request.user.profile, following_user_prof=profile_to_toggle).exists():
+            ProfileFollowing.objects.filter(user_prof=request.user.profile, following_user_prof=profile_to_toggle).delete()
+        else:
+            ProfileFollowing.objects.create(user_prof=request.user.profile, following_user_prof=profile_to_toggle)
+
+    return redirect('profile', profile_to_toggle.user.id)

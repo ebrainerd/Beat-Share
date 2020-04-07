@@ -56,7 +56,11 @@
                         <a style="color: white;" href="{% url 'home' %}">Home Feed</a>
                     </div>
                 </li>
-                <li>Subscriptions</li>
+                <li>
+                    <div class="middle-refresh">
+                        <a style="color: white;" href="{% url 'subscriptions' %}">Subscriptions</a>
+                    </div>
+                </li>
                 <li>
                     <div class="middle-refresh">
                         <a style="color: white;" href="{% url 'profile' user.id %}">Profile</a>
